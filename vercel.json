@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "http://78.154.103.48:9836/api/$1"
+      "destination": "http://78.154.103.53:9944/api/$1"
     },
     {
       "source": "/socket.io/(.*)",
-      "destination": "http://78.154.103.48:9836/socket.io/$1"
+      "destination": "http://78.154.103.53:9944/socket.io/$1"
     }
   ]
 }
