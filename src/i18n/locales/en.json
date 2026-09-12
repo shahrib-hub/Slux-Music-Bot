@@ -1,0 +1,896 @@
+{
+  "common": {
+    "error": "Something went wrong. Please try again.",
+    "errorTitle": "Error",
+    "doneTitle": "Done",
+    "warnTitle": "Heads up",
+    "noVoiceChannel": "You need to join a voice channel first.",
+    "noPlayer": "Nothing is playing right now.",
+    "notInSameVoice": "You must be in the same voice channel as me.",
+    "queueEmpty": "The queue is empty.",
+    "cancelled": "Cancelled.",
+    "timeUp": "Time expired.",
+    "djRequired": "You need a DJ role or the Manage Channels permission to use this command.",
+    "manageGuildRequired": "You need the Manage Server permission to use this command.",
+    "blacklisted": "You are not allowed to use this bot.",
+    "nothingFound": "Nothing found for that query.",
+    "invalidNumber": "Please provide a valid number.",
+    "page": "Page {current}/{total}",
+    "requestedBy": "Requested by {user}",
+    "unknownCommand": "Unknown command. Try `{prefix}help`.",
+    "yes": "Yes",
+    "no": "No",
+    "on": "ON",
+    "off": "OFF",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "none": "None",
+    "minutes": "minutes",
+    "tracks": "tracks",
+    "commands": "commands",
+    "viewExpired": "This view has expired — run the command again for a fresh one.",
+    "cooldown": "You're using commands too quickly — try again in a few seconds.",
+    "channelNotAllowed": "Commands are not allowed in this channel.",
+    "mentionHelp": {
+      "title": "Hi, I'm Slux!",
+      "description": "Your server's music bot — search, queue, lyrics, filters and a live web dashboard. Here's how to use me:",
+      "prefixField": "Prefix here",
+      "prefixValue": "Use {prefix} before commands, e.g. {prefix}play",
+      "slashField": "Slash commands",
+      "slashValue": "Type `/` anywhere and pick a command.",
+      "popularField": "Popular commands",
+      "tipField": "Tip",
+      "tipValue": "Mention me for this message anytime, or run {prefix}help for the full list.",
+      "commandsButton": "All commands",
+      "dashboardButton": "Dashboard",
+      "inviteButton": "Invite me"
+    }
+  },
+  "commands": {
+    "247": {
+      "name": "247",
+      "description": "Toggle staying in the voice channel 24/7"
+    },
+    "play": {
+      "name": "play",
+      "description": "Play a song, playlist, or search query",
+      "options": {
+        "query": "Song name, URL, or playlist link"
+      }
+    },
+    "playnext": {
+      "name": "playnext",
+      "description": "Add a song to play right after the current one",
+      "options": {
+        "query": "Song name or URL"
+      }
+    },
+    "playtop": {
+      "name": "playtop",
+      "description": "Add a song to the top of the queue",
+      "options": {
+        "query": "Song name or URL"
+      }
+    },
+    "playskip": {
+      "name": "playskip",
+      "description": "Add a song to the top and skip to it immediately",
+      "options": {
+        "query": "Song name or URL"
+      }
+    },
+    "pause": {
+      "name": "pause",
+      "description": "Pause the current song"
+    },
+    "resume": {
+      "name": "resume",
+      "description": "Resume the paused song"
+    },
+    "stop": {
+      "name": "stop",
+      "description": "Stop playing, clear the queue and leave"
+    },
+    "skip": {
+      "name": "skip",
+      "description": "Skip the current song"
+    },
+    "previous": {
+      "name": "previous",
+      "description": "Play the previous song from history"
+    },
+    "seek": {
+      "name": "seek",
+      "description": "Seek to a position in the current song",
+      "options": {
+        "position": "Position like 1:30, 90, or 1m30s"
+      }
+    },
+    "forward": {
+      "name": "forward",
+      "description": "Fast forward by a number of seconds",
+      "options": {
+        "seconds": "Seconds to fast forward"
+      }
+    },
+    "rewind": {
+      "name": "rewind",
+      "description": "Rewind by a number of seconds",
+      "options": {
+        "seconds": "Seconds to rewind"
+      }
+    },
+    "queue": {
+      "name": "queue",
+      "description": "Show the current queue",
+      "options": {
+        "page": "Page number"
+      }
+    },
+    "nowplaying": {
+      "name": "nowplaying",
+      "description": "Show the song that is currently playing"
+    },
+    "remove": {
+      "name": "remove",
+      "description": "Remove a song from the queue",
+      "options": {
+        "index": "The queue position to remove"
+      }
+    },
+    "clear": {
+      "name": "clear",
+      "description": "Clear the entire queue"
+    },
+    "move": {
+      "name": "move",
+      "description": "Move a song within the queue",
+      "options": {
+        "from": "Position to move from",
+        "to": "Position to move to"
+      }
+    },
+    "shuffle": {
+      "name": "shuffle",
+      "description": "Shuffle the queue"
+    },
+    "loop": {
+      "name": "loop",
+      "description": "Set the loop mode",
+      "options": {
+        "mode": "Loop mode: off, track, or queue"
+      }
+    },
+    "volume": {
+      "name": "volume",
+      "description": "Set or view the volume",
+      "options": {
+        "level": "Volume from 0 to 150"
+      }
+    },
+    "join": {
+      "name": "join",
+      "description": "Join your voice channel"
+    },
+    "replay": {
+      "name": "replay",
+      "description": "Replay the current song from the start"
+    },
+    "grab": {
+      "name": "grab",
+      "description": "Get the current song in your DMs"
+    },
+    "search": {
+      "name": "search",
+      "description": "Search for songs and pick one",
+      "options": {
+        "query": "What to search for"
+      }
+    },
+    "lyrics": {
+      "name": "lyrics",
+      "description": "Show lyrics for the current song"
+    },
+    "autoplay": {
+      "name": "autoplay",
+      "description": "Toggle autoplay of related songs"
+    },
+    "djmode": {
+      "name": "djmode",
+      "description": "Toggle DJ mode: only voice members can control the bot"
+    },
+    "playlist": {
+      "name": "playlist",
+      "description": "Manage your playlists",
+      "subcommands": {
+        "create": {
+          "description": "Create a new playlist",
+          "options": {
+            "name": "Playlist name"
+          }
+        },
+        "delete": {
+          "description": "Delete one of your playlists",
+          "options": {
+            "name": "Playlist name"
+          }
+        },
+        "rename": {
+          "description": "Rename one of your playlists",
+          "options": {
+            "old": "Current name",
+            "new": "New name"
+          }
+        },
+        "add": {
+          "description": "Add a song or playlist link to a playlist",
+          "options": {
+            "name": "Playlist name",
+            "query": "Song or URL"
+          }
+        },
+        "remove": {
+          "description": "Remove a track from a playlist by position",
+          "options": {
+            "name": "Playlist name",
+            "index": "Track position"
+          }
+        },
+        "list": {
+          "description": "List your playlists"
+        },
+        "info": {
+          "description": "Show the tracks of a playlist",
+          "options": {
+            "name": "Playlist name"
+          }
+        },
+        "load": {
+          "description": "Load a playlist into the queue",
+          "options": {
+            "name": "Playlist name"
+          }
+        },
+        "public": {
+          "description": "Toggle a playlist between public and private",
+          "options": {
+            "name": "Playlist name"
+          }
+        },
+        "save": {
+          "description": "Save the current queue as a playlist",
+          "options": {
+            "name": "Name for the playlist"
+          }
+        }
+      }
+    },
+    "favorites": {
+      "name": "favorites",
+      "description": "Manage your favorite songs",
+      "subcommands": {
+        "add": {
+          "description": "Add the current song or a query to your favorites",
+          "options": {
+            "query": "Song name or URL (empty = current song)"
+          }
+        },
+        "remove": {
+          "description": "Remove a favorite by position",
+          "options": {
+            "index": "Favorite position"
+          }
+        },
+        "list": {
+          "description": "List your favorites"
+        },
+        "play": {
+          "description": "Play your favorites"
+        }
+      }
+    },
+    "bassboost": {
+      "name": "bassboost",
+      "description": "Toggle the bassboost filter",
+      "options": {
+        "level": "Level: low, medium, high, or insane"
+      }
+    },
+    "nightcore": {
+      "name": "nightcore",
+      "description": "Toggle the nightcore filter"
+    },
+    "vaporwave": {
+      "name": "vaporwave",
+      "description": "Toggle the vaporwave filter"
+    },
+    "soft": {
+      "name": "soft",
+      "description": "Toggle the soft filter"
+    },
+    "8d": {
+      "name": "8d",
+      "description": "Toggle the 8D audio filter"
+    },
+    "karaoke": {
+      "name": "karaoke",
+      "description": "Toggle the karaoke filter"
+    },
+    "tremolo": {
+      "name": "tremolo",
+      "description": "Toggle the tremolo filter"
+    },
+    "vibrato": {
+      "name": "vibrato",
+      "description": "Toggle the vibrato filter"
+    },
+    "distortion": {
+      "name": "distortion",
+      "description": "Toggle the distortion filter"
+    },
+    "lowpass": {
+      "name": "lowpass",
+      "description": "Toggle the lowpass filter"
+    },
+    "speed": {
+      "name": "speed",
+      "description": "Set the playback speed",
+      "options": {
+        "value": "Speed from 0.5 to 5.0"
+      }
+    },
+    "pitch": {
+      "name": "pitch",
+      "description": "Set the pitch",
+      "options": {
+        "value": "Pitch from 0.5 to 5.0"
+      }
+    },
+    "eq": {
+      "name": "eq",
+      "description": "Set a custom equalizer like 3 0 0 1 0 -1",
+      "options": {
+        "bands": "15 gains from -1 to 1"
+      }
+    },
+    "filters": {
+      "name": "filters",
+      "description": "Show active filters"
+    },
+    "filtersreset": {
+      "name": "reset",
+      "description": "Reset all filters"
+    },
+    "settings": {
+      "name": "settings",
+      "description": "Show the server settings"
+    },
+    "prefix": {
+      "name": "prefix",
+      "description": "Set the command prefix for this server",
+      "options": {
+        "prefix": "New prefix, up to 5 characters"
+      }
+    },
+    "language": {
+      "name": "language",
+      "description": "Set the bot language for this server",
+      "options": {
+        "language": "Language to use"
+      }
+    },
+    "djrole": {
+      "name": "djrole",
+      "description": "Manage DJ roles",
+      "subcommands": {
+        "add": {
+          "description": "Add a DJ role",
+          "options": {
+            "role": "The role"
+          }
+        },
+        "remove": {
+          "description": "Remove a DJ role",
+          "options": {
+            "role": "The role"
+          }
+        },
+        "list": {
+          "description": "List DJ roles"
+        }
+      }
+    },
+    "botchannel": {
+      "name": "botchannel",
+      "description": "Restrict music commands to specific channels",
+      "subcommands": {
+        "add": {
+          "description": "Allow a channel",
+          "options": {
+            "channel": "The channel"
+          }
+        },
+        "remove": {
+          "description": "Disallow a channel",
+          "options": {
+            "channel": "The channel"
+          }
+        },
+        "clear": {
+          "description": "Allow all channels"
+        }
+      }
+    },
+    "defaultvolume": {
+      "name": "defaultvolume",
+      "description": "Set the default volume for this server",
+      "options": {
+        "level": "Volume from 0 to 150"
+      }
+    },
+    "idletimeout": {
+      "name": "idletimeout",
+      "description": "Set how long to wait before leaving when idle",
+      "options": {
+        "minutes": "Minutes, 0 to disable"
+      }
+    },
+    "help": {
+      "name": "help",
+      "description": "Show the help menu"
+    },
+    "ping": {
+      "name": "ping",
+      "description": "Show the bot latency"
+    },
+    "stats": {
+      "name": "stats",
+      "description": "Show bot statistics"
+    },
+    "invite": {
+      "name": "invite",
+      "description": "Get the bot invite link"
+    },
+    "about": {
+      "name": "about",
+      "description": "Show info about Slux"
+    },
+    "skipto": {
+      "description": "Skip to a specific track in the queue",
+      "options": {
+        "index": "Queue position to jump to"
+      }
+    },
+    "removeduplicates": {
+      "description": "Remove duplicate tracks from the queue"
+    },
+    "sleep": {
+      "description": "Pause playback after a delay (sleep timer)",
+      "options": {
+        "minutes": "Minutes until pause (0 or off to cancel)"
+      }
+    },
+    "nodes": {
+      "description": "Show the status of the music nodes"
+    },
+    "developer": {
+      "description": "Meet the developer behind Slux"
+    }
+  },
+  "music": {
+    "nowPlaying": "Now Playing",
+    "pausedLabel": "Paused",
+    "searching": "Searching...",
+    "added": "Added **{title}** to the queue",
+    "addedAt": "Added **{title}** to position #{position} of the queue",
+    "addedPlaylist": "Added **{count}** tracks from **{name}** to the queue",
+    "addedTitle": "Added to queue",
+    "addedTopTitle": "Added to top",
+    "skipPlayTitle": "Skipping to",
+    "playlistAddedTitle": "Playlist added",
+    "queuePosition": "Position",
+    "queueTotal": "Queue",
+    "totalDuration": "Total length",
+    "selectPrompt": "Select a track — results for `{query}`",
+    "selectButton": "Pick",
+    "cancelButton": "Cancel",
+    "searchResultsTitle": "Search results",
+    "selectFooter": "Pick a track below",
+    "selectPlaceholder": "Pick a track…",
+    "paused": "Paused the player.",
+    "resumed": "Resumed the player.",
+    "alreadyPaused": "The player is already paused.",
+    "notPaused": "The player is not paused.",
+    "stopped": "Stopped the player and left the channel.",
+    "stoppedTitle": "Stopped",
+    "skipped": "Skipped **{title}**.",
+    "skippedTitle": "Skipped",
+    "noPrevious": "There is no previous song.",
+    "previousNow": "Now playing the previous song.",
+    "previousTitle": "Previous track",
+    "queueTitle": "Queue for {guild}",
+    "queueNowPlaying": "**Now Playing** — [{title}]({uri}) `{duration}`",
+    "queueUpNext": "Up Next",
+    "queueFooter": "{count} tracks • {duration} total",
+    "queueJumpTo": "Jump to page…",
+    "queuePageOption": "Page {page}",
+    "npLength": "Length",
+    "npPosition": "Position",
+    "npProgress": "Progress",
+    "npVolume": "Volume",
+    "npLoop": "Loop",
+    "npFilters": "Filters",
+    "live": "LIVE",
+    "stream": "Live stream",
+    "removed": "Removed **{title}** from the queue.",
+    "removedTitle": "Removed",
+    "invalidIndex": "There is no track at position #{index}.",
+    "cleared": "Cleared the queue ({count} tracks).",
+    "clearedTitle": "Queue cleared",
+    "moved": "Moved **{title}** from #{from} to #{to}.",
+    "movedTitle": "Track moved",
+    "shuffled": "Shuffled the queue ({count} tracks).",
+    "shuffledTitle": "Shuffled",
+    "loopOff": "Loop is now **off**.",
+    "loopTrack": "Now looping the **current track**.",
+    "loopQueue": "Now looping the **queue**.",
+    "loopTitle": "Loop mode",
+    "loopCurrent": "Loop mode is {mode}",
+    "loopModeOff": "Off",
+    "loopModeTrack": "Track",
+    "loopModeQueue": "Queue",
+    "volumeSet": "Volume set to **{level}%**.",
+    "volumeCurrent": "Volume is currently **{level}%**.",
+    "volumeTitle": "Volume",
+    "volDown": "Volume −10",
+    "volUp": "Volume +10",
+    "volMute": "Mute",
+    "pausedTitle": "Paused",
+    "resumedTitle": "Resumed",
+    "seeked": "Seeked to **{position}**.",
+    "seekedTitle": "Seeked",
+    "seekInvalid": "Invalid position — the song is only {length} long.",
+    "forwarded": "Forwarded to **{position}**.",
+    "forwardedTitle": "Forwarded",
+    "rewound": "Rewound to **{position}**.",
+    "rewoundTitle": "Rewound",
+    "replaying": "Replaying the current song.",
+    "replayingTitle": "Replaying",
+    "joined": "Joined **{channel}**.",
+    "joinedTitle": "Joined voice",
+    "joinFailed": "I could not join that voice channel.",
+    "grabTitle": "Song grabbed",
+    "grabDmed": "I sent you the current song in your DMs.",
+    "grabDmFailed": "I could not DM you — please enable DMs from server members.",
+    "grabSource": "Source",
+    "lyricsTitle": "Lyrics for {title}",
+    "lyricsNone": "No lyrics found for the current song.",
+    "lyricsSynced": "Synced",
+    "lyricsPlain": "Plain",
+    "autoplayOn": "Autoplay is now **enabled** — I will keep playing related songs.",
+    "autoplayOff": "Autoplay is now **disabled**.",
+    "autoplayLabel": "Autoplay",
+    "stayOn": "24/7 mode is now **enabled** — I will stay in the channel.",
+    "stayOff": "24/7 mode is now **disabled**.",
+    "djmodeOn": "DJ mode is now **enabled** — only listeners in the voice channel can control me.",
+    "djmodeOff": "DJ mode is now **disabled**.",
+    "djmodeLabel": "DJ mode",
+    "djmodeActive": "DJ mode is active — only listeners in the voice channel can control me.",
+    "leftIdle": "Left the channel due to inactivity.",
+    "leftAlone": "Left the channel because everyone left.",
+    "notSeekable": "This track cannot be seeked.",
+    "queueEnded": "The queue has ended.",
+    "ctrlPrevious": "Previous",
+    "ctrlPause": "Pause",
+    "ctrlResume": "Resume",
+    "ctrlSkip": "Skip",
+    "ctrlLoop": "Loop",
+    "ctrlStop": "Stop",
+    "ctrlShuffle": "Shuffle",
+    "ctrlQueue": "Queue",
+    "ctrlLyrics": "Lyrics",
+    "ctrlVolDown": "Vol −10",
+    "ctrlVolUp": "Vol +10",
+    "engineNotReady": "The music engine is not connected yet — Lavalink is still starting or unreachable. Try again in a minute (check the bot console).",
+    "skiptoTitle": "Skipped to track",
+    "skiptoDone": "Jumped straight to position {index} — everything before it was dropped.",
+    "removedDuplicatesTitle": "Duplicates removed",
+    "removedDuplicates": "Removed **{count}** duplicate track(s) from the queue.",
+    "noDuplicates": "No duplicate tracks found — your queue is clean!",
+    "sleepTitle": "Sleep timer",
+    "sleepSet": "I'll pause playback in {minutes} minute(s).",
+    "sleepCancelled": "Sleep timer cancelled.",
+    "sleepStatus": "Playback pauses in {minutes} minute(s).",
+    "sleepNone": "No sleep timer is set. Use `sleep <minutes>` to schedule one."
+  },
+  "playlists": {
+    "created": "Created playlist **{name}**.",
+    "createdTitle": "Playlist created",
+    "deleted": "Deleted playlist **{name}**.",
+    "deletedTitle": "Playlist deleted",
+    "renamed": "Renamed **{old}** to **{new}**.",
+    "renamedTitle": "Playlist renamed",
+    "notFound": "You do not have a playlist named **{name}**.",
+    "exists": "You already have a playlist named **{name}**.",
+    "nameTooLong": "Playlist names can be at most 64 characters.",
+    "addedTracks": "Added **{count}** tracks to **{name}**.",
+    "addedTitle": "Track added",
+    "addedCurrent": "Added **{title}** to **{name}**.",
+    "noCurrent": "Nothing is playing — provide a song name or URL.",
+    "removedTrack": "Removed **{title}** from **{name}**.",
+    "removedTrackTitle": "Track removed",
+    "listTitle": "Your playlists",
+    "listEmpty": "You have no playlists yet.",
+    "infoTitle": "Playlist: {name}",
+    "infoFooter": "{count} tracks • {duration} • {visibility}",
+    "public": "Public",
+    "private": "Private",
+    "visibilityTitle": "Visibility changed",
+    "loaded": "Loaded **{count}** tracks from **{name}**.",
+    "loadedTitle": "Playlist loaded",
+    "empty": "Playlist **{name}** is empty.",
+    "limitReached": "Playlists can hold at most {limit} tracks.",
+    "tooManyToAdd": "That would exceed the playlist limit of {limit} tracks.",
+    "favorites": "Favorites",
+    "favoritesEmpty": "You have no favorites yet.",
+    "favoritesAdded": "Added **{title}** to your favorites.",
+    "favoritesRemoved": "Removed **{title}** from your favorites.",
+    "favoritesLoaded": "Loaded **{count}** favorites.",
+    "owner": "Owner",
+    "savedQueueTitle": "Queue saved",
+    "savedQueue": "Saved the current queue ({count} tracks) to playlist **{name}**.",
+    "savedQueueUpdated": "Updated playlist **{name}** with the current queue ({count} tracks).",
+    "nothingToSave": "Nothing is playing — there is no queue to save."
+  },
+  "filters": {
+    "applied": "Filter **{name}** applied.",
+    "appliedTitle": "Filter applied",
+    "removed": "Filter **{name}** removed.",
+    "removedTitle": "Filter removed",
+    "reset": "All filters have been reset.",
+    "resetTitle": "Filters reset",
+    "resetAll": "Reset all filters",
+    "openPanel": "Filter panel",
+    "panelTitle": "Audio filters",
+    "panelHint": "Pick a filter below to toggle it — changes apply instantly.",
+    "pickPlaceholder": "Toggle a filter…",
+    "stateOn": "ON — select to disable",
+    "stateOff": "OFF — select to enable",
+    "listTitle": "Active filters",
+    "listNone": "No filters are active.",
+    "invalidLevel": "Level must be one of: low, medium, high, insane.",
+    "invalidValue": "Value must be between {min} and {max}.",
+    "eqApplied": "Custom equalizer applied.",
+    "eqUsage": "Usage: `{prefix}eq <15 gains from -1 to 1>` — e.g. `{prefix}eq 0.3 0.3 0.2 0 -0.2 0 0 0 0 0 0 0 0 0 0`"
+  },
+  "settings": {
+    "247": "Default 24/7",
+    "title": "Settings for {guild}",
+    "prefix": "Prefix",
+    "language": "Language",
+    "djRoles": "DJ roles",
+    "botChannels": "Allowed channels",
+    "defaultVolume": "Default volume",
+    "autoplay": "Default autoplay",
+    "idleTimeout": "Idle timeout",
+    "allChannels": "All channels",
+    "noTimeout": "Disabled",
+    "prefixSet": "Prefix set to `{prefix}`.",
+    "prefixInvalid": "The prefix must be 1-5 characters and cannot contain spaces.",
+    "languageSet": "Language set to **{language}**.",
+    "languageInvalid": "Available languages: {languages}.",
+    "djRoleAdded": "**{role}** is now a DJ role.",
+    "djRoleRemoved": "**{role}** is no longer a DJ role.",
+    "djRoleNotSet": "**{role}** is not a DJ role.",
+    "djRoleList": "DJ roles: {roles}",
+    "djRoleNone": "No DJ roles are set.",
+    "botChannelAdded": "Music commands are now restricted to **{channel}**.",
+    "botChannelRemoved": "**{channel}** was removed from the allowed channels.",
+    "botChannelNotSet": "**{channel}** is not in the allowed channels.",
+    "botChannelCleared": "Music commands are now allowed in all channels.",
+    "defaultVolumeSet": "Default volume set to **{level}%**.",
+    "idleTimeoutSet": "Idle timeout set to **{minutes}** minutes.",
+    "idleTimeoutDisabled": "Idle timeout disabled — I will stay until stopped."
+  },
+  "info": {
+    "helpTitle": "Slux — Help",
+    "helpDescription": "A feature-rich music bot. Use slash commands or `{prefix}` as prefix.",
+    "helpPickCategory": "Choose a command category…",
+    "helpCategoryCount": "{count} commands",
+    "helpAndMore": "+{count} more",
+    "helpCommandsTitle": "Commands",
+    "helpFields": {
+      "music": "Music",
+      "playlists": "Playlists",
+      "filters": "Filters",
+      "settings": "Settings",
+      "info": "Info"
+    },
+    "helpFooter": "See all commands on the dashboard",
+    "pingTitle": "Pong!",
+    "pingStatus": "Gateway connection status",
+    "pingWebsocket": "Websocket",
+    "pingRoundtrip": "Roundtrip",
+    "pingLavalink": "Lavalink",
+    "statsTitle": "Slux — Statistics",
+    "statsServers": "Servers",
+    "statsPlayers": "Active players",
+    "statsUsers": "Users",
+    "statsUptime": "Uptime",
+    "statsMemory": "Memory",
+    "statsNode": "Lavalink node",
+    "statsNodePenalties": "Node penalties",
+    "inviteTitle": "Invite Slux",
+    "inviteDescription": "Click the button below to add Slux to your server.",
+    "inviteButton": "Invite Slux",
+    "dashboardButton": "Open dashboard",
+    "aboutTitle": "About Slux",
+    "aboutDescription": "Slux is a free, feature-rich Discord music bot with Spotify, YouTube, SoundCloud, Deezer, Apple Music and more — with a real-time web dashboard.",
+    "aboutSources": "Sources",
+    "aboutFeatures": "Highlights",
+    "aboutFooter": "Made with ♥ — free forever, no premium tiers",
+    "nodesTitle": "Music nodes",
+    "nodesActive": "Active node: {name}",
+    "nodeConnected": "Connected",
+    "nodeConnecting": "Connecting…",
+    "nodeDisconnecting": "Disconnecting…",
+    "nodeDisconnected": "Offline",
+    "nodePlayers": "Players",
+    "nodeCpu": "CPU",
+    "developerTitle": "Made by SHM",
+    "developerDescription": "Slux is designed, built and maintained by **SHM**. Every feature — the player engine, filters, dashboard and lyrics — is crafted with love.",
+    "developerRole": "Creator & Developer",
+    "developerWorkTitle": "The work",
+    "developerWork": "Follow **@Letzforge** on YouTube for build videos, dev logs and tutorials on projects like this one.",
+    "developerFooter": "Made with ❤️ by SHM"
+  },
+  "dashboard": {
+    "nav": {
+      "player": "Player",
+      "settings": "Settings",
+      "playlists": "Playlists",
+      "backToSite": "Back to site",
+      "logout": "Log out",
+      "dashboard": "Dashboard",
+      "commands": "Commands",
+      "theme": "Theme"
+    },
+    "landing": {
+      "badge": "Free forever — no premium tiers",
+      "title": "Music that never misses a beat",
+      "subtitle": "Slux is a feature-rich Discord music bot with Spotify, YouTube, SoundCloud, Deezer and Apple Music support — plus a real-time dashboard to control everything from your browser.",
+      "addDiscord": "Add to Discord",
+      "openDashboard": "Open Dashboard",
+      "featuresTitle": "Everything you need",
+      "featuresSubtitle": "All features, free for everyone. That is the Slux promise.",
+      "sourcesTitle": "All your sources",
+      "sourcesDescription": "Search and play from Spotify, YouTube, SoundCloud, Deezer, Apple Music, Tidal and YouTube Music.",
+      "filtersTitle": "Studio-grade filters",
+      "filtersDescription": "Bassboost, nightcore, vaporwave, 8D, karaoke and a full 15-band equalizer.",
+      "playlistsTitle": "Powerful playlists",
+      "playlistsDescription": "Save your favorite tracks, import playlists and load them in one command.",
+      "lyricsTitle": "Synced lyrics",
+      "lyricsDescription": "Follow along in Discord or on the dashboard with time-synced lyrics.",
+      "dashboardTitle": "Real-time dashboard",
+      "dashboardDescription": "Control playback, manage the queue and configure the bot from your browser.",
+      "autoplayTitle": "Autoplay & 24/7",
+      "autoplayDescription": "Slux keeps the music going with related tracks and can stay in voice all day.",
+      "i18nTitle": "Speaks your language",
+      "i18nDescription": "English, Hindi, Spanish, French, German and Portuguese out of the box.",
+      "statsServers": "servers",
+      "statsPlayers": "active players",
+      "statsTracks": "tracks played",
+      "ctaTitle": "Ready to upgrade your server's sound?",
+      "ctaSubtitle": "Add Slux in under a minute. No setup, no premium, no limits."
+    },
+    "commands": {
+      "title": "Commands",
+      "subtitle": "Everything Slux can do — in {count} commands",
+      "search": "Search commands...",
+      "noResults": "No commands match your search.",
+      "usage": "Usage"
+    },
+    "guilds": {
+      "title": "Your servers",
+      "subtitle": "Pick a server to manage",
+      "invite": "Invite",
+      "manage": "Manage",
+      "empty": "No servers with Manage Server permission found."
+    },
+    "settings": {
+      "title": "Settings",
+      "general": "General",
+      "playback": "Playback",
+      "dj": "DJ",
+      "prefix": "Command prefix",
+      "prefixDescription": "Prefix for text commands",
+      "language": "Language",
+      "languageDescription": "Bot responses language",
+      "defaultVolume": "Default volume",
+      "defaultVolumeDescription": "Volume when the player starts",
+      "autoplay": "Autoplay",
+      "autoplayDescription": "Keep playing related tracks when the queue ends",
+      "stay247": "24/7 mode",
+      "stay247Description": "Stay in the voice channel when alone or idle",
+      "idleTimeout": "Idle timeout",
+      "idleTimeoutDescription": "Leave after this many minutes idle (0 = never)",
+      "djRoles": "DJ roles",
+      "djRolesDescription": "Roles that can use DJ commands",
+      "botChannels": "Allowed channels",
+      "botChannelsDescription": "Restrict music commands to these channels",
+      "allChannels": "All channels allowed",
+      "save": "Save changes",
+      "saved": "Settings saved",
+      "saveFailed": "Failed to save settings",
+      "notAvailable": "Server not available — is the bot in it?"
+    },
+    "player": {
+      "title": "Player",
+      "notConnected": "Not connected",
+      "notConnectedDescription": "Slux is not in a voice channel. Pick a channel to start listening.",
+      "join": "Join channel",
+      "nowPlaying": "Now playing",
+      "nothingPlaying": "Nothing playing",
+      "queue": "Queue",
+      "queueEmpty": "The queue is empty — search for something!",
+      "lyrics": "Lyrics",
+      "noLyrics": "No lyrics available for this track.",
+      "lyricsSynced": "Synced",
+      "lyricsPlain": "Plain",
+      "autoScroll": "Auto-scroll",
+      "history": "History",
+      "historyEmpty": "Nothing in the history yet.",
+      "replay": "Play again",
+      "filtersTab": "Filters",
+      "filtersNone": "No filters are active.",
+      "filtersReset": "Reset filters",
+      "seekHint": "Drag to seek",
+      "searchPlaceholder": "Search or paste a link...",
+      "play": "Play",
+      "pause": "Pause",
+      "resume": "Resume",
+      "previous": "Previous",
+      "skip": "Skip",
+      "stop": "Stop",
+      "shuffle": "Shuffle",
+      "loop": "Loop",
+      "volume": "Volume",
+      "autoplay": "Autoplay",
+      "clear": "Clear queue",
+      "remove": "Remove",
+      "moveTop": "Move to top",
+      "added": "Added to the queue",
+      "live": "LIVE",
+      "requestedBy": "Requested by",
+      "playingIn": "Playing in"
+    },
+    "playlists": {
+      "title": "Your playlists",
+      "subtitle": "Your saved collections, available on any server",
+      "create": "New playlist",
+      "createTitle": "Create a playlist",
+      "namePlaceholder": "Playlist name",
+      "descriptionPlaceholder": "Description (optional)",
+      "createCta": "Create",
+      "delete": "Delete playlist",
+      "deleteConfirm": "Delete playlist \"{name}\"? This cannot be undone.",
+      "public": "Public",
+      "private": "Private",
+      "tracks": "tracks",
+      "empty": "No playlists yet — create your first one!",
+      "loadToGuild": "Play in a server",
+      "removeTrack": "Remove track",
+      "created": "Playlist created",
+      "deleted": "Playlist deleted",
+      "emptyPlaylist": "This playlist is empty."
+    },
+    "auth": {
+      "login": "Login with Discord",
+      "loginRequired": "Login required",
+      "loginRequiredDescription": "You need to log in with Discord to access the dashboard."
+    },
+    "user": {
+      "loggedInAs": "Logged in as"
+    }
+  }
+}

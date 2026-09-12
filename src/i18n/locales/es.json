@@ -1,0 +1,896 @@
+{
+  "common": {
+    "error": "Algo salió mal. Por favor, inténtalo de nuevo.",
+    "noVoiceChannel": "Primero debes unirte a un canal de voz.",
+    "noPlayer": "No se está reproduciendo nada en este momento.",
+    "notInSameVoice": "Debes estar en el mismo canal de voz que yo.",
+    "queueEmpty": "La cola está vacía.",
+    "cancelled": "Cancelado.",
+    "timeUp": "Tiempo agotado.",
+    "djRequired": "Necesitas un rol de DJ o el permiso Administrar canales para usar este comando.",
+    "manageGuildRequired": "Necesitas el permiso Administrar servidor para usar este comando.",
+    "blacklisted": "No tienes permiso para usar este bot.",
+    "nothingFound": "No se encontró nada para esa búsqueda.",
+    "invalidNumber": "Por favor, proporciona un número válido.",
+    "page": "Página {current}/{total}",
+    "requestedBy": "Solicitado por {user}",
+    "unknownCommand": "Comando desconocido. Prueba `{prefix}help`.",
+    "yes": "Sí",
+    "no": "No",
+    "enabled": "Activado",
+    "disabled": "Desactivado",
+    "none": "Ninguno",
+    "minutes": "minutos",
+    "tracks": "canciones",
+    "errorTitle": "Error",
+    "doneTitle": "Hecho",
+    "warnTitle": "Atención",
+    "on": "SÍ",
+    "off": "NO",
+    "commands": "comandos",
+    "viewExpired": "Esta vista ha caducado — ejecuta el comando de nuevo.",
+    "cooldown": "Estás usando comandos demasiado rápido — inténtalo de nuevo en unos segundos.",
+    "channelNotAllowed": "Los comandos no están permitidos en este canal.",
+    "mentionHelp": {
+      "title": "¡Hola, soy Slux!",
+      "description": "El bot de música de tu servidor — búsqueda, cola, letras, filtros y un panel web en vivo. Así se usa:",
+      "prefixField": "Prefijo aquí",
+      "prefixValue": "Usa {prefix} antes de los comandos, p. ej. {prefix}play",
+      "slashField": "Comandos slash",
+      "slashValue": "Escribe `/` en cualquier sitio y elige un comando.",
+      "popularField": "Comandos populares",
+      "tipField": "Consejo",
+      "tipValue": "Mencióname cuando quieras para ver este mensaje, o usa {prefix}help para la lista completa.",
+      "commandsButton": "Todos los comandos",
+      "dashboardButton": "Panel",
+      "inviteButton": "Invítame"
+    }
+  },
+  "commands": {
+    "247": {
+      "name": "247",
+      "description": "Activa o desactiva quedarse en el canal 24/7"
+    },
+    "play": {
+      "name": "play",
+      "description": "Reproduce una canción, lista o búsqueda",
+      "options": {
+        "query": "Nombre de la canción, URL o enlace de lista"
+      }
+    },
+    "playnext": {
+      "name": "playnext",
+      "description": "Añade una canción para reproducir justo después de la actual",
+      "options": {
+        "query": "Nombre de la canción o URL"
+      }
+    },
+    "playtop": {
+      "name": "playtop",
+      "description": "Añade una canción al principio de la cola",
+      "options": {
+        "query": "Nombre de la canción o URL"
+      }
+    },
+    "playskip": {
+      "name": "playskip",
+      "description": "Añade una canción al principio y salta inmediatamente a ella",
+      "options": {
+        "query": "Nombre de la canción o URL"
+      }
+    },
+    "pause": {
+      "name": "pause",
+      "description": "Pausa la canción actual"
+    },
+    "resume": {
+      "name": "resume",
+      "description": "Reanuda la canción en pausa"
+    },
+    "stop": {
+      "name": "stop",
+      "description": "Detiene la reproducción, vacía la cola y se va"
+    },
+    "skip": {
+      "name": "skip",
+      "description": "Salta la canción actual"
+    },
+    "previous": {
+      "name": "previous",
+      "description": "Reproduce la canción anterior del historial"
+    },
+    "seek": {
+      "name": "seek",
+      "description": "Salta a una posición de la canción actual",
+      "options": {
+        "position": "Posición como 1:30, 90 o 1m30s"
+      }
+    },
+    "forward": {
+      "name": "forward",
+      "description": "Avanza un número de segundos",
+      "options": {
+        "seconds": "Segundos a avanzar"
+      }
+    },
+    "rewind": {
+      "name": "rewind",
+      "description": "Retrocede un número de segundos",
+      "options": {
+        "seconds": "Segundos a retroceder"
+      }
+    },
+    "queue": {
+      "name": "queue",
+      "description": "Muestra la cola actual",
+      "options": {
+        "page": "Número de página"
+      }
+    },
+    "nowplaying": {
+      "name": "nowplaying",
+      "description": "Muestra la canción que se está reproduciendo"
+    },
+    "remove": {
+      "name": "remove",
+      "description": "Elimina una canción de la cola",
+      "options": {
+        "index": "La posición de la cola a eliminar"
+      }
+    },
+    "clear": {
+      "name": "clear",
+      "description": "Vacía toda la cola"
+    },
+    "move": {
+      "name": "move",
+      "description": "Mueve una canción dentro de la cola",
+      "options": {
+        "from": "Posición de origen",
+        "to": "Posición de destino"
+      }
+    },
+    "shuffle": {
+      "name": "shuffle",
+      "description": "Baraja la cola"
+    },
+    "loop": {
+      "name": "loop",
+      "description": "Establece el modo de repetición",
+      "options": {
+        "mode": "Modo: off, track o queue"
+      }
+    },
+    "volume": {
+      "name": "volume",
+      "description": "Establece o consulta el volumen",
+      "options": {
+        "level": "Volumen de 0 a 150"
+      }
+    },
+    "join": {
+      "name": "join",
+      "description": "Únete a tu canal de voz"
+    },
+    "replay": {
+      "name": "replay",
+      "description": "Repite la canción actual desde el principio"
+    },
+    "grab": {
+      "name": "grab",
+      "description": "Recibe la canción actual por mensaje directo"
+    },
+    "search": {
+      "name": "search",
+      "description": "Busca canciones y elige una",
+      "options": {
+        "query": "Qué buscar"
+      }
+    },
+    "lyrics": {
+      "name": "lyrics",
+      "description": "Muestra la letra de la canción actual"
+    },
+    "autoplay": {
+      "name": "autoplay",
+      "description": "Activa o desactiva la reproducción automática"
+    },
+    "djmode": {
+      "name": "djmode",
+      "description": "Activa el modo DJ: solo los miembros del canal controlan el bot"
+    },
+    "playlist": {
+      "name": "playlist",
+      "description": "Gestiona tus listas de reproducción",
+      "subcommands": {
+        "create": {
+          "description": "Crea una nueva lista",
+          "options": {
+            "name": "Nombre de la lista"
+          }
+        },
+        "delete": {
+          "description": "Elimina una de tus listas",
+          "options": {
+            "name": "Nombre de la lista"
+          }
+        },
+        "rename": {
+          "description": "Renombra una de tus listas",
+          "options": {
+            "old": "Nombre actual",
+            "new": "Nuevo nombre"
+          }
+        },
+        "add": {
+          "description": "Añade una canción o enlace a una lista",
+          "options": {
+            "name": "Nombre de la lista",
+            "query": "Canción o URL"
+          }
+        },
+        "remove": {
+          "description": "Elimina una canción por posición",
+          "options": {
+            "name": "Nombre de la lista",
+            "index": "Posición de la canción"
+          }
+        },
+        "list": {
+          "description": "Lista tus listas de reproducción"
+        },
+        "info": {
+          "description": "Muestra las canciones de una lista",
+          "options": {
+            "name": "Nombre de la lista"
+          }
+        },
+        "load": {
+          "description": "Carga una lista en la cola",
+          "options": {
+            "name": "Nombre de la lista"
+          }
+        },
+        "public": {
+          "description": "Alterna una lista entre pública y privada",
+          "options": {
+            "name": "Nombre de la lista"
+          }
+        },
+        "save": {
+          "description": "Guarda la cola actual como playlist",
+          "options": {
+            "name": "Nombre de la playlist"
+          }
+        }
+      }
+    },
+    "favorites": {
+      "name": "favorites",
+      "description": "Gestiona tus canciones favoritas",
+      "subcommands": {
+        "add": {
+          "description": "Añade la canción actual o una búsqueda a favoritos",
+          "options": {
+            "query": "Nombre o URL (vacío = canción actual)"
+          }
+        },
+        "remove": {
+          "description": "Elimina un favorito por posición",
+          "options": {
+            "index": "Posición del favorito"
+          }
+        },
+        "list": {
+          "description": "Lista tus favoritos"
+        },
+        "play": {
+          "description": "Reproduce tus favoritos"
+        }
+      }
+    },
+    "bassboost": {
+      "name": "bassboost",
+      "description": "Activa o desactiva el filtro bassboost",
+      "options": {
+        "level": "Nivel: low, medium, high o insane"
+      }
+    },
+    "nightcore": {
+      "name": "nightcore",
+      "description": "Activa o desactiva el filtro nightcore"
+    },
+    "vaporwave": {
+      "name": "vaporwave",
+      "description": "Activa o desactiva el filtro vaporwave"
+    },
+    "soft": {
+      "name": "soft",
+      "description": "Activa o desactiva el filtro soft"
+    },
+    "8d": {
+      "name": "8d",
+      "description": "Activa o desactiva el filtro de audio 8D"
+    },
+    "karaoke": {
+      "name": "karaoke",
+      "description": "Activa o desactiva el filtro karaoke"
+    },
+    "tremolo": {
+      "name": "tremolo",
+      "description": "Activa o desactiva el filtro tremolo"
+    },
+    "vibrato": {
+      "name": "vibrato",
+      "description": "Activa o desactiva el filtro vibrato"
+    },
+    "distortion": {
+      "name": "distortion",
+      "description": "Activa o desactiva el filtro distortion"
+    },
+    "lowpass": {
+      "name": "lowpass",
+      "description": "Activa o desactiva el filtro lowpass"
+    },
+    "speed": {
+      "name": "speed",
+      "description": "Establece la velocidad de reproducción",
+      "options": {
+        "value": "Velocidad de 0.5 a 5.0"
+      }
+    },
+    "pitch": {
+      "name": "pitch",
+      "description": "Establece el tono",
+      "options": {
+        "value": "Tono de 0.5 a 5.0"
+      }
+    },
+    "eq": {
+      "name": "eq",
+      "description": "Establece un ecualizador personalizado como 3 0 0 1 0 -1",
+      "options": {
+        "bands": "15 ganancias de -1 a 1"
+      }
+    },
+    "filters": {
+      "name": "filters",
+      "description": "Muestra los filtros activos"
+    },
+    "filtersreset": {
+      "name": "reset",
+      "description": "Restablece todos los filtros"
+    },
+    "settings": {
+      "name": "settings",
+      "description": "Muestra la configuración del servidor"
+    },
+    "prefix": {
+      "name": "prefix",
+      "description": "Establece el prefijo de comandos para este servidor",
+      "options": {
+        "prefix": "Nuevo prefijo, hasta 5 caracteres"
+      }
+    },
+    "language": {
+      "name": "language",
+      "description": "Establece el idioma del bot para este servidor",
+      "options": {
+        "language": "Idioma a usar"
+      }
+    },
+    "djrole": {
+      "name": "djrole",
+      "description": "Gestiona los roles de DJ",
+      "subcommands": {
+        "add": {
+          "description": "Añade un rol de DJ",
+          "options": {
+            "role": "El rol"
+          }
+        },
+        "remove": {
+          "description": "Quita un rol de DJ",
+          "options": {
+            "role": "El rol"
+          }
+        },
+        "list": {
+          "description": "Lista los roles de DJ"
+        }
+      }
+    },
+    "botchannel": {
+      "name": "botchannel",
+      "description": "Restringe los comandos de música a canales específicos",
+      "subcommands": {
+        "add": {
+          "description": "Permite un canal",
+          "options": {
+            "channel": "El canal"
+          }
+        },
+        "remove": {
+          "description": "Veta un canal",
+          "options": {
+            "channel": "El canal"
+          }
+        },
+        "clear": {
+          "description": "Permite todos los canales"
+        }
+      }
+    },
+    "defaultvolume": {
+      "name": "defaultvolume",
+      "description": "Establece el volumen por defecto de este servidor",
+      "options": {
+        "level": "Volumen de 0 a 150"
+      }
+    },
+    "idletimeout": {
+      "name": "idletimeout",
+      "description": "Establece cuánto esperar antes de irse al estar inactivo",
+      "options": {
+        "minutes": "Minutos, 0 para desactivar"
+      }
+    },
+    "help": {
+      "name": "help",
+      "description": "Muestra el menú de ayuda"
+    },
+    "ping": {
+      "name": "ping",
+      "description": "Muestra la latencia del bot"
+    },
+    "stats": {
+      "name": "stats",
+      "description": "Muestra estadísticas del bot"
+    },
+    "invite": {
+      "name": "invite",
+      "description": "Obtiene el enlace de invitación del bot"
+    },
+    "about": {
+      "name": "about",
+      "description": "Muestra información sobre Slux"
+    },
+    "skipto": {
+      "description": "Salta a una pista concreta de la cola",
+      "options": {
+        "index": "Posición de la cola a la que saltar"
+      }
+    },
+    "removeduplicates": {
+      "description": "Elimina las pistas duplicadas de la cola"
+    },
+    "sleep": {
+      "description": "Pausa la reproducción tras un tiempo (temporizador)",
+      "options": {
+        "minutes": "Minutos hasta la pausa (0 u off para cancelar)"
+      }
+    },
+    "nodes": {
+      "description": "Muestra el estado de los nodos de música"
+    },
+    "developer": {
+      "description": "Conoce al desarrollador de Slux"
+    }
+  },
+  "music": {
+    "nowPlaying": "Reproduciendo ahora",
+    "searching": "Buscando...",
+    "added": "Se añadió **{title}** a la cola",
+    "addedAt": "Se añadió **{title}** a la posición #{position} de la cola",
+    "addedPlaylist": "Se añadiaron **{count}** canciones de **{name}** a la cola",
+    "selectPrompt": "Elige una canción — resultados para `{query}`",
+    "selectButton": "Elegir",
+    "cancelButton": "Cancelar",
+    "paused": "Reproductor en pausa.",
+    "resumed": "Reproductor reanudado.",
+    "alreadyPaused": "El reproductor ya está en pausa.",
+    "notPaused": "El reproductor no está en pausa.",
+    "stopped": "Reproductor detenido y canal abandonado.",
+    "skipped": "Se saltó **{title}**.",
+    "noPrevious": "No hay canción anterior.",
+    "previousNow": "Reproduciendo la canción anterior.",
+    "queueTitle": "Cola de {guild}",
+    "queueNowPlaying": "**Reproduciendo** — [{title}]({uri}) `{duration}`",
+    "queueUpNext": "A continuación",
+    "queueFooter": "{count} canciones • {duration} en total",
+    "npLength": "Duración",
+    "npPosition": "Posición",
+    "npVolume": "Volumen",
+    "npLoop": "Bucle",
+    "npFilters": "Filtros",
+    "live": "EN VIVO",
+    "stream": "Transmisión en vivo",
+    "removed": "Se eliminó **{title}** de la cola.",
+    "invalidIndex": "No hay ninguna canción en la posición #{index}.",
+    "cleared": "Cola vaciada ({count} canciones).",
+    "moved": "Se movió **{title}** de #{from} a #{to}.",
+    "shuffled": "Cola barajada ({count} canciones).",
+    "loopOff": "El bucle está ahora **desactivado**.",
+    "loopTrack": "Repitiendo la **canción actual**.",
+    "loopQueue": "Repitiendo la **cola**.",
+    "volumeSet": "Volumen establecido al **{level}%**.",
+    "volumeCurrent": "El volumen actual es **{level}%**.",
+    "seeked": "Saltado a **{position}**.",
+    "seekInvalid": "Posición no válida — la canción dura solo {length}.",
+    "forwarded": "Avanzado a **{position}**.",
+    "rewound": "Retrocedido a **{position}**.",
+    "joined": " Unido a **{channel}**.",
+    "joinFailed": "No pude unirme a ese canal de voz.",
+    "replaying": "Repitiendo la canción actual.",
+    "grabTitle": "Canción guardada",
+    "grabDmed": "Te envié la canción actual por mensaje directo.",
+    "grabDmFailed": "No pude enviarte un mensaje directo — activa los MD de miembros del servidor.",
+    "lyricsTitle": "Letra de {title}",
+    "lyricsNone": "No se encontró letra para la canción actual.",
+    "autoplayOn": "Reproducción automática **activada** — seguiré poniendo canciones relacionadas.",
+    "autoplayOff": "Reproducción automática **desactivada**.",
+    "stayOn": "Modo 24/7 **activado** — me quedaré en el canal.",
+    "stayOff": "Modo 24/7 **desactivado**.",
+    "djmodeOn": "Modo DJ **activado** — solo los oyentes del canal de voz pueden controlarme.",
+    "djmodeOff": "Modo DJ **desactivado**.",
+    "djmodeActive": "El modo DJ está activo — solo los oyentes del canal de voz pueden controlarme.",
+    "leftIdle": "Abandoné el canal por inactividad.",
+    "leftAlone": "Abandoné el canal porque todos se fueron.",
+    "notSeekable": "No se puede saltar en esta canción.",
+    "queueEnded": "La cola ha terminado.",
+    "pausedLabel": "En pausa",
+    "addedTitle": "Añadido a la cola",
+    "addedTopTitle": "Añadido al principio",
+    "skipPlayTitle": "Saltando a",
+    "playlistAddedTitle": "Lista añadida",
+    "queuePosition": "Posición",
+    "queueTotal": "Cola",
+    "totalDuration": "Duración total",
+    "searchResultsTitle": "Resultados de búsqueda",
+    "selectFooter": "Elige una pista abajo",
+    "selectPlaceholder": "Elige una pista…",
+    "stoppedTitle": "Detenido",
+    "skippedTitle": "Saltada",
+    "previousTitle": "Pista anterior",
+    "queueJumpTo": "Ir a la página…",
+    "queuePageOption": "Página {page}",
+    "npProgress": "Progreso",
+    "removedTitle": "Eliminada",
+    "clearedTitle": "Cola vaciada",
+    "movedTitle": "Pista movida",
+    "shuffledTitle": "Aleatorizada",
+    "loopTitle": "Modo de repetición",
+    "loopCurrent": "El modo de repetición es {mode}",
+    "loopModeOff": "Off",
+    "loopModeTrack": "Pista",
+    "loopModeQueue": "Cola",
+    "volumeTitle": "Volumen",
+    "volDown": "Volumen −10",
+    "volUp": "Volumen +10",
+    "volMute": "Silenciar",
+    "pausedTitle": "En pausa",
+    "resumedTitle": "Reanudado",
+    "seekedTitle": "Posición cambiada",
+    "forwardedTitle": "Adelantado",
+    "rewoundTitle": "Rebobinado",
+    "replayingTitle": "Reproduciendo de nuevo",
+    "joinedTitle": "Conectado",
+    "grabSource": "Fuente",
+    "lyricsSynced": "Sincronizada",
+    "lyricsPlain": "Simple",
+    "autoplayLabel": "Reproducción automática",
+    "djmodeLabel": "Modo DJ",
+    "ctrlPrevious": "Anterior",
+    "ctrlPause": "Pausa",
+    "ctrlResume": "Reanudar",
+    "ctrlSkip": "Saltar",
+    "ctrlLoop": "Bucle",
+    "ctrlStop": "Detener",
+    "ctrlShuffle": "Aleatorio",
+    "ctrlQueue": "Cola",
+    "ctrlLyrics": "Letra",
+    "ctrlVolDown": "Vol −10",
+    "ctrlVolUp": "Vol +10",
+    "engineNotReady": "El motor de música no está conectado todavía — Lavalink aún está arrancando o no es accesible. Inténtalo de nuevo en un minuto (revisa la consola del bot).",
+    "skiptoTitle": "Saltado a la pista",
+    "skiptoDone": "Salté directamente a la posición {index} — todo lo anterior fue descartado.",
+    "removedDuplicatesTitle": "Duplicados eliminados",
+    "removedDuplicates": "Se eliminaron **{count}** pista(s) duplicada(s) de la cola.",
+    "noDuplicates": "No hay pistas duplicadas — ¡tu cola está limpia!",
+    "sleepTitle": "Temporizador",
+    "sleepSet": "Pausaré la reproducción en {minutes} minuto(s).",
+    "sleepCancelled": "Temporizador cancelado.",
+    "sleepStatus": "La reproducción se pausa en {minutes} minuto(s).",
+    "sleepNone": "No hay temporizador. Usa `sleep <minutos>` para programarlo."
+  },
+  "playlists": {
+    "created": "Lista **{name}** creada.",
+    "deleted": "Lista **{name}** eliminada.",
+    "renamed": "Lista **{old}** renombrada a **{new}**.",
+    "notFound": "No tienes una lista llamada **{name}**.",
+    "exists": "Ya tienes una lista llamada **{name}**.",
+    "nameTooLong": "Los nombres de lista pueden tener como máximo 64 caracteres.",
+    "addedTracks": "Se añadiaron **{count}** canciones a **{name}**.",
+    "addedCurrent": "Se añadió **{title}** a **{name}**.",
+    "noCurrent": "No se está reproduciendo nada — indica un nombre o URL.",
+    "removedTrack": "Se eliminó **{title}** de **{name}**.",
+    "listTitle": "Tus listas de reproducción",
+    "listEmpty": "Aún no tienes listas de reproducción.",
+    "infoTitle": "Lista: {name}",
+    "infoFooter": "{count} canciones • {duration} • {visibility}",
+    "public": "Pública",
+    "private": "Privada",
+    "loaded": "Se cargaron **{count}** canciones de **{name}**.",
+    "empty": "La lista **{name}** está vacía.",
+    "limitReached": "Las listas pueden contener como máximo {limit} canciones.",
+    "tooManyToAdd": "Eso superaría el límite de {limit} canciones de la lista.",
+    "favorites": "Favoritos",
+    "favoritesEmpty": "Aún no tienes favoritos.",
+    "favoritesAdded": "**{title}** añadido a tus favoritos.",
+    "favoritesRemoved": "**{title}** eliminado de tus favoritos.",
+    "favoritesLoaded": "Se cargaron **{count}** favoritos.",
+    "owner": "Propietario",
+    "createdTitle": "Lista creada",
+    "deletedTitle": "Lista eliminada",
+    "renamedTitle": "Lista renombrada",
+    "addedTitle": "Pista añadida",
+    "removedTrackTitle": "Pista eliminada",
+    "visibilityTitle": "Visibilidad cambiada",
+    "loadedTitle": "Lista cargada",
+    "savedQueueTitle": "Cola guardada",
+    "savedQueue": "Se guardó la cola actual ({count} pistas) en la playlist **{name}**.",
+    "savedQueueUpdated": "Se actualizó la playlist **{name}** con la cola actual ({count} pistas).",
+    "nothingToSave": "No suena nada — no hay cola que guardar."
+  },
+  "filters": {
+    "applied": "Filtro **{name}** aplicado.",
+    "removed": "Filtro **{name}** desactivado.",
+    "reset": "Se restablecieron todos los filtros.",
+    "listTitle": "Filtros activos",
+    "listNone": "No hay filtros activos.",
+    "invalidLevel": "El nivel debe ser: low, medium, high o insane.",
+    "invalidValue": "El valor debe estar entre {min} y {max}.",
+    "eqApplied": "Ecualizador personalizado aplicado.",
+    "eqUsage": "Uso: `{prefix}eq <15 ganancias de -1 a 1>` — p. ej. `{prefix}eq 0.3 0.3 0.2 0 -0.2 0 0 0 0 0 0 0 0 0 0`",
+    "appliedTitle": "Filtro aplicado",
+    "removedTitle": "Filtro quitado",
+    "resetTitle": "Filtros restablecidos",
+    "resetAll": "Restablecer filtros",
+    "openPanel": "Panel de filtros",
+    "panelTitle": "Filtros de audio",
+    "panelHint": "Elige un filtro para activarlo o desactivarlo — los cambios son instantáneos.",
+    "pickPlaceholder": "Activa un filtro…",
+    "stateOn": "SÍ — selecciónalo para desactivar",
+    "stateOff": "NO — selecciónalo para activar"
+  },
+  "settings": {
+    "247": "24/7 por defecto",
+    "title": "Configuración de {guild}",
+    "prefix": "Prefijo",
+    "language": "Idioma",
+    "djRoles": "Roles de DJ",
+    "botChannels": "Canales permitidos",
+    "defaultVolume": "Volumen por defecto",
+    "autoplay": "Autoplay por defecto",
+    "idleTimeout": "Tiempo de inactividad",
+    "allChannels": "Todos los canales",
+    "noTimeout": "Desactivado",
+    "prefixSet": "Prefijo establecido a `{prefix}`.",
+    "prefixInvalid": "El prefijo debe tener 1-5 caracteres y no contener espacios.",
+    "languageSet": "Idioma establecido a **{language}**.",
+    "languageInvalid": "Idiomas disponibles: {languages}.",
+    "djRoleAdded": "**{role}** ahora es un rol de DJ.",
+    "djRoleRemoved": "**{role}** ya no es un rol de DJ.",
+    "djRoleNotSet": "**{role}** no es un rol de DJ.",
+    "djRoleList": "Roles de DJ: {roles}",
+    "djRoleNone": "No hay roles de DJ establecidos.",
+    "botChannelAdded": "Los comandos de música ahora se restringen a **{channel}**.",
+    "botChannelRemoved": "**{channel}** fue eliminado de los canales permitidos.",
+    "botChannelNotSet": "**{channel}** no está en los canales permitidos.",
+    "botChannelCleared": "Los comandos de música ahora se permiten en todos los canales.",
+    "defaultVolumeSet": "Volumen por defecto establecido al **{level}%**.",
+    "idleTimeoutSet": "Tiempo de inactividad establecido a **{minutes}** minutos.",
+    "idleTimeoutDisabled": "Tiempo de inactividad desactivado — me quedaré hasta que me detengan."
+  },
+  "info": {
+    "helpTitle": "Slux — Ayuda",
+    "helpDescription": "Un bot de música lleno de funciones. Usa comandos de barra o `{prefix}` como prefijo.",
+    "helpFields": {
+      "music": "Música",
+      "playlists": "Listas",
+      "filters": "Filtros",
+      "settings": "Configuración",
+      "info": "Información"
+    },
+    "helpFooter": "Ver todos los comandos en el panel",
+    "pingTitle": "¡Pong!",
+    "pingWebsocket": "Websocket",
+    "pingRoundtrip": "Ida y vuelta",
+    "pingLavalink": "Lavalink",
+    "statsTitle": "Slux — Estadísticas",
+    "statsServers": "Servidores",
+    "statsPlayers": "Reproductores activos",
+    "statsUsers": "Usuarios",
+    "statsUptime": "Tiempo activo",
+    "statsMemory": "Memoria",
+    "statsNode": "Nodo Lavalink",
+    "statsNodePenalties": "Penalizaciones del nodo",
+    "inviteTitle": "Invitar a Slux",
+    "inviteDescription": "Haz clic en el botón de abajo para añadir Slux a tu servidor.",
+    "aboutTitle": "Sobre Slux",
+    "aboutDescription": "Slux es un bot de música de Discord gratuito y lleno de funciones con Spotify, YouTube, SoundCloud, Deezer, Apple Music y más — con un panel web en tiempo real.",
+    "aboutFooter": "Hecho con ♥ — gratis para siempre, sin niveles premium",
+    "helpPickCategory": "Elige una categoría de comandos…",
+    "helpCategoryCount": "{count} comandos",
+    "helpAndMore": "+{count} más",
+    "helpCommandsTitle": "Comandos",
+    "pingStatus": "Estado de la conexión",
+    "inviteButton": "Invitar a Slux",
+    "dashboardButton": "Abrir panel",
+    "aboutSources": "Fuentes",
+    "aboutFeatures": "Destacados",
+    "nodesTitle": "Nodos de música",
+    "nodesActive": "Nodo activo: {name}",
+    "nodeConnected": "Conectado",
+    "nodeConnecting": "Conectando…",
+    "nodeDisconnecting": "Desconectando…",
+    "nodeDisconnected": "Desconectado",
+    "nodePlayers": "Reproductores",
+    "nodeCpu": "CPU",
+    "developerTitle": "Hecho por SHM",
+    "developerDescription": "Slux está diseñado, construido y mantenido por **SHM**. Cada función — el motor de reproducción, los filtros, el panel y las letras — está hecha con cariño.",
+    "developerRole": "Creador y desarrollador",
+    "developerWorkTitle": "El proyecto",
+    "developerWork": "Sigue a **@Letzforge** en YouTube para vídeos de construcción, dev logs y tutoriales de proyectos como este.",
+    "developerFooter": "Hecho con ❤️ por SHM"
+  },
+  "dashboard": {
+    "nav": {
+      "player": "Reproductor",
+      "settings": "Configuración",
+      "playlists": "Listas",
+      "backToSite": "Volver al sitio",
+      "logout": "Cerrar sesión",
+      "dashboard": "Panel",
+      "commands": "Comandos",
+      "theme": "Tema"
+    },
+    "landing": {
+      "badge": "Gratis para siempre — sin premium",
+      "title": "Música que nunca pierde el ritmo",
+      "subtitle": "Slux es un bot de música de Discord lleno de funciones con soporte para Spotify, YouTube, SoundCloud, Deezer y Apple Music — además de un panel en tiempo real para controlarlo todo desde tu navegador.",
+      "addDiscord": "Añadir a Discord",
+      "openDashboard": "Abrir panel",
+      "featuresTitle": "Todo lo que necesitas",
+      "featuresSubtitle": "Todas las funciones, gratis para todos. Esa es la promesa de Slux.",
+      "sourcesTitle": "Todas tus fuentes",
+      "sourcesDescription": "Busca y reproduce desde Spotify, YouTube, SoundCloud, Deezer, Apple Music, Tidal y YouTube Music.",
+      "filtersTitle": "Filtros de estudio",
+      "filtersDescription": "Bassboost, nightcore, vaporwave, 8D, karaoke y un ecualizador completo de 15 bandas.",
+      "playlistsTitle": "Listas potentes",
+      "playlistsDescription": "Guarda tus canciones favoritas, importa listas y cárgalas con un solo comando.",
+      "lyricsTitle": "Letras sincronizadas",
+      "lyricsDescription": "Sigue la letra en Discord o en el panel con letras sincronizadas.",
+      "dashboardTitle": "Panel en tiempo real",
+      "dashboardDescription": "Controla la reproducción, gestiona la cola y configura el bot desde tu navegador.",
+      "autoplayTitle": "Autoplay y 24/7",
+      "autoplayDescription": "Slux mantiene la música con canciones relacionadas y puede quedarse en el canal todo el día.",
+      "i18nTitle": "Habla tu idioma",
+      "i18nDescription": "Inglés, hindi, español, francés, alemán y portugués de serie.",
+      "statsServers": "servidores",
+      "statsPlayers": "reproductores activos",
+      "statsTracks": "canciones reproducidas",
+      "ctaTitle": "¿Listo para mejorar el sonido de tu servidor?",
+      "ctaSubtitle": "Añade Slux en menos de un minuto. Sin configuración, sin premium, sin límites."
+    },
+    "commands": {
+      "title": "Comandos",
+      "subtitle": "Todo lo que Slux puede hacer — en {count} comandos",
+      "search": "Buscar comandos...",
+      "noResults": "Ningún comando coincide con tu búsqueda.",
+      "usage": "Uso"
+    },
+    "guilds": {
+      "title": "Tus servidores",
+      "subtitle": "Elige un servidor para gestionarlo",
+      "invite": "Invitar",
+      "manage": "Gestionar",
+      "empty": "No se encontraron servidores con permiso de Administrar servidor."
+    },
+    "settings": {
+      "title": "Configuración",
+      "general": "General",
+      "playback": "Reproducción",
+      "dj": "DJ",
+      "prefix": "Prefijo de comandos",
+      "prefixDescription": "Prefijo para comandos de texto",
+      "language": "Idioma",
+      "languageDescription": "Idioma de las respuestas del bot",
+      "defaultVolume": "Volumen por defecto",
+      "defaultVolumeDescription": "Volumen al iniciar el reproductor",
+      "autoplay": "Autoplay",
+      "autoplayDescription": "Seguir reproduciendo canciones relacionadas al terminar la cola",
+      "stay247": "Modo 24/7",
+      "stay247Description": "Quedarse en el canal de voz al estar solo o inactivo",
+      "idleTimeout": "Tiempo de inactividad",
+      "idleTimeoutDescription": "Irse tras estos minutos de inactividad (0 = nunca)",
+      "djRoles": "Roles de DJ",
+      "djRolesDescription": "Roles que pueden usar comandos de DJ",
+      "botChannels": "Canales permitidos",
+      "botChannelsDescription": "Restringir los comandos de música a estos canales",
+      "allChannels": "Todos los canales permitidos",
+      "save": "Guardar cambios",
+      "saved": "Configuración guardada",
+      "saveFailed": "Error al guardar la configuración",
+      "notAvailable": "Servidor no disponible — ¿está el bot en él?"
+    },
+    "player": {
+      "title": "Reproductor",
+      "notConnected": "No conectado",
+      "notConnectedDescription": "Slux no está en un canal de voz. Elige un canal para empezar a escuchar.",
+      "join": "Unirse al canal",
+      "nowPlaying": "Reproduciendo ahora",
+      "nothingPlaying": "Nada suena",
+      "queue": "Cola",
+      "queueEmpty": "La cola está vacía — ¡busca algo!",
+      "lyrics": "Letra",
+      "noLyrics": "No hay letra disponible para esta canción.",
+      "searchPlaceholder": "Busca o pega un enlace...",
+      "play": "Reproducir",
+      "pause": "Pausar",
+      "resume": "Reanudar",
+      "previous": "Anterior",
+      "skip": "Saltar",
+      "stop": "Detener",
+      "shuffle": "Barajar",
+      "loop": "Bucle",
+      "volume": "Volumen",
+      "autoplay": "Autoplay",
+      "clear": "Vaciar cola",
+      "remove": "Eliminar",
+      "moveTop": "Mover arriba",
+      "added": "Añadido a la cola",
+      "live": "EN VIVO",
+      "lyricsSynced": "Sincronizada",
+      "lyricsPlain": "Simple",
+      "autoScroll": "Auto-desplazamiento",
+      "history": "Historial",
+      "historyEmpty": "El historial está vacío.",
+      "replay": "Reproducir de nuevo",
+      "filtersTab": "Filtros",
+      "filtersNone": "No hay filtros activos.",
+      "filtersReset": "Restablecer filtros",
+      "seekHint": "Arrastra para buscar",
+      "requestedBy": "Pedida por",
+      "playingIn": "Sonando en"
+    },
+    "playlists": {
+      "title": "Tus listas",
+      "subtitle": "Tus colecciones guardadas, disponibles en cualquier servidor",
+      "create": "Nueva lista",
+      "createTitle": "Crear una lista",
+      "namePlaceholder": "Nombre de la lista",
+      "descriptionPlaceholder": "Descripción (opcional)",
+      "createCta": "Crear",
+      "delete": "Eliminar lista",
+      "deleteConfirm": "¿Eliminar la lista \"{name}\"? Esto no se puede deshacer.",
+      "public": "Pública",
+      "private": "Privada",
+      "tracks": "canciones",
+      "empty": "Aún no hay listas — ¡crea la primera!",
+      "loadToGuild": "Reproducir en un servidor",
+      "removeTrack": "Eliminar canción",
+      "created": "Lista creada",
+      "deleted": "Lista eliminada",
+      "emptyPlaylist": "Esta lista está vacía."
+    },
+    "auth": {
+      "login": "Iniciar sesión con Discord",
+      "loginRequired": "Inicio de sesión requerido",
+      "loginRequiredDescription": "Necesitas iniciar sesión con Discord para acceder al panel."
+    },
+    "user": {
+      "loggedInAs": "Sesión iniciada como"
+    }
+  }
+}

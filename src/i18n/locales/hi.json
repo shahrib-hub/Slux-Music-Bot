@@ -1,0 +1,896 @@
+{
+  "common": {
+    "error": "कुछ गलत हो गया। कृपया फिर से प्रयास करें।",
+    "noVoiceChannel": "पहले आपको एक वॉइस चैनल में शामिल होना होगा।",
+    "noPlayer": "अभी कुछ भी नहीं बज रहा है।",
+    "notInSameVoice": "आपको मेरे समान वॉइस चैनल में होना चाहिए।",
+    "queueEmpty": "क्यू खाली है।",
+    "cancelled": "रद्द कर दिया गया।",
+    "timeUp": "समय समाप्त हो गया।",
+    "djRequired": "इस कमांड के लिए आपको DJ रोल या Manage Channels अनुमति चाहिए।",
+    "manageGuildRequired": "इस कमांड के लिए आपको Manage Server अनुमति चाहिए।",
+    "blacklisted": "आप इस बॉट का उपयोग करने के लिए अधिकृत नहीं हैं।",
+    "nothingFound": "इस क्वेरी के लिए कुछ नहीं मिला।",
+    "invalidNumber": "कृपया एक मान्य संख्या दें।",
+    "page": "पृष्ठ {current}/{total}",
+    "requestedBy": "{user} द्वारा अनुरोधित",
+    "unknownCommand": "अज्ञात कमांड। `{prefix}help` आज़माएँ।",
+    "yes": "हाँ",
+    "no": "नहीं",
+    "enabled": "सक्रिय",
+    "disabled": "निष्क्रिय",
+    "none": "कोई नहीं",
+    "minutes": "मिनट",
+    "tracks": "ट्रैक",
+    "errorTitle": "त्रुटि",
+    "doneTitle": "पूर्ण",
+    "warnTitle": "ध्यान दें",
+    "on": "चालू",
+    "off": "बंद",
+    "commands": "कमांड",
+    "viewExpired": "यह व्यू समाप्त हो गया है — कमांड फिर से चलाएँ।",
+    "cooldown": "आप बहुत तेज़ी से कमांड चला रहे हैं — कुछ सेकंड में फिर कोशिश करें।",
+    "channelNotAllowed": "इस चैनल में कमांड की अनुमति नहीं है।",
+    "mentionHelp": {
+      "title": "नमस्ते, मैं Slux हूँ!",
+      "description": "आपके सर्वर का म्यूज़िक बॉट — सर्च, क्यू, बोल, फ़िल्टर और लाइव वेब डैशबोर्ड। मुझे ऐसे इस्तेमाल करें:",
+      "prefixField": "यहाँ का प्रीफ़िक्स",
+      "prefixValue": "कमांड से पहले {prefix} लगाएँ, जैसे {prefix}play",
+      "slashField": "स्लैश कमांड",
+      "slashValue": "कहीं भी `/` टाइप करें और कमांड चुनें।",
+      "popularField": "लोकप्रिय कमांड",
+      "tipField": "सुझाव",
+      "tipValue": "यह संदेश देखने के लिए मुझे कभी भी मेंशन करें, या पूरी सूची के लिए {prefix}help चलाएँ।",
+      "commandsButton": "सभी कमांड",
+      "dashboardButton": "डैशबोर्ड",
+      "inviteButton": "मुझे इनवाइट करें"
+    }
+  },
+  "commands": {
+    "247": {
+      "name": "247",
+      "description": "24/7 वॉइस चैनल में रहना टॉगल करें"
+    },
+    "play": {
+      "name": "play",
+      "description": "एक गाना, प्लेलिस्ट या खोज बजाएँ",
+      "options": {
+        "query": "गाने का नाम, URL या प्लेलिस्ट लिंक"
+      }
+    },
+    "playnext": {
+      "name": "playnext",
+      "description": "गाना वर्तमान गाने के तुरंत बाद जोड़ें",
+      "options": {
+        "query": "गाने का नाम या URL"
+      }
+    },
+    "playtop": {
+      "name": "playtop",
+      "description": "गाना क्यू के सबसे ऊपर जोड़ें",
+      "options": {
+        "query": "गाने का नाम या URL"
+      }
+    },
+    "playskip": {
+      "name": "playskip",
+      "description": "गाना सबसे ऊपर जोड़ें और तुरंत उस पर जाएँ",
+      "options": {
+        "query": "गाने का नाम या URL"
+      }
+    },
+    "pause": {
+      "name": "pause",
+      "description": "वर्तमान गाना रोकें"
+    },
+    "resume": {
+      "name": "resume",
+      "description": "रुके हुए गाने को जारी रखें"
+    },
+    "stop": {
+      "name": "stop",
+      "description": "बजाना बंद करें, क्यू साफ़ करें और चले जाएँ"
+    },
+    "skip": {
+      "name": "skip",
+      "description": "वर्तमान गाना छोड़ दें"
+    },
+    "previous": {
+      "name": "previous",
+      "description": "इतिहास से पिछला गाना बजाएँ"
+    },
+    "seek": {
+      "name": "seek",
+      "description": "वर्तमान गाने में एक स्थिति पर जाएँ",
+      "options": {
+        "position": "1:30, 90, या 1m30s जैसी स्थिति"
+      }
+    },
+    "forward": {
+      "name": "forward",
+      "description": "कुछ सेकंड आगे बढ़ें",
+      "options": {
+        "seconds": "आगे बढ़ने के सेकंड"
+      }
+    },
+    "rewind": {
+      "name": "rewind",
+      "description": "कुछ सेकंड पीछे जाएँ",
+      "options": {
+        "seconds": "पीछे जाने के सेकंड"
+      }
+    },
+    "queue": {
+      "name": "queue",
+      "description": "वर्तमान क्यू दिखाएँ",
+      "options": {
+        "page": "पृष्ठ संख्या"
+      }
+    },
+    "nowplaying": {
+      "name": "nowplaying",
+      "description": "अभी जो गाना बज रहा है उसे दिखाएँ"
+    },
+    "remove": {
+      "name": "remove",
+      "description": "क्यू से एक गाना हटाएँ",
+      "options": {
+        "index": "हटाने के लिए क्यू स्थिति"
+      }
+    },
+    "clear": {
+      "name": "clear",
+      "description": "पूरी क्यू साफ़ करें"
+    },
+    "move": {
+      "name": "move",
+      "description": "क्यू में एक गाना स्थानांतरित करें",
+      "options": {
+        "from": "कहाँ से",
+        "to": "कहाँ तक"
+      }
+    },
+    "shuffle": {
+      "name": "shuffle",
+      "description": "क्यू को शफ़ल करें"
+    },
+    "loop": {
+      "name": "loop",
+      "description": "लूप मोड सेट करें",
+      "options": {
+        "mode": "लूप मोड: off, track, या queue"
+      }
+    },
+    "volume": {
+      "name": "volume",
+      "description": "वॉल्यूम सेट करें या देखें",
+      "options": {
+        "level": "0 से 150 तक वॉल्यूम"
+      }
+    },
+    "join": {
+      "name": "join",
+      "description": "आपके वॉइस चैनल में शामिल हों"
+    },
+    "replay": {
+      "name": "replay",
+      "description": "वर्तमान गाना शुरू से बजाएँ"
+    },
+    "grab": {
+      "name": "grab",
+      "description": "वर्तमान गाना DM में प्राप्त करें"
+    },
+    "search": {
+      "name": "search",
+      "description": "गाने खोजें और एक चुनें",
+      "options": {
+        "query": "क्या खोजना है"
+      }
+    },
+    "lyrics": {
+      "name": "lyrics",
+      "description": "वर्तमान गाने के बोल दिखाएँ"
+    },
+    "autoplay": {
+      "name": "autoplay",
+      "description": "संबंधित गानों का ऑटोप्ले टॉगल करें"
+    },
+    "djmode": {
+      "name": "djmode",
+      "description": "DJ मोड टॉगल करें: केवल वॉइस सदस्य बॉट नियंत्रित कर सकते हैं"
+    },
+    "playlist": {
+      "name": "playlist",
+      "description": "अपनी प्लेलिस्ट प्रबंधित करें",
+      "subcommands": {
+        "create": {
+          "description": "नई प्लेलिस्ट बनाएँ",
+          "options": {
+            "name": "प्लेलिस्ट का नाम"
+          }
+        },
+        "delete": {
+          "description": "अपनी एक प्लेलिस्ट हटाएँ",
+          "options": {
+            "name": "प्लेलिस्ट का नाम"
+          }
+        },
+        "rename": {
+          "description": "प्लेलिस्ट का नाम बदलें",
+          "options": {
+            "old": "वर्तमान नाम",
+            "new": "नया नाम"
+          }
+        },
+        "add": {
+          "description": "प्लेलिस्ट में गाना या लिंक जोड़ें",
+          "options": {
+            "name": "प्लेलिस्ट का नाम",
+            "query": "गाना या URL"
+          }
+        },
+        "remove": {
+          "description": "स्थिति से ट्रैक हटाएँ",
+          "options": {
+            "name": "प्लेलिस्ट का नाम",
+            "index": "ट्रैक स्थिति"
+          }
+        },
+        "list": {
+          "description": "अपनी प्लेलिस्ट दिखाएँ"
+        },
+        "info": {
+          "description": "प्लेलिस्ट के ट्रैक दिखाएँ",
+          "options": {
+            "name": "प्लेलिस्ट का नाम"
+          }
+        },
+        "load": {
+          "description": "प्लेलिस्ट क्यू में लोड करें",
+          "options": {
+            "name": "प्लेलिस्ट का नाम"
+          }
+        },
+        "public": {
+          "description": "प्लेलिस्ट सार्वजनिक/निजी टॉगल करें",
+          "options": {
+            "name": "प्लेलिस्ट का नाम"
+          }
+        },
+        "save": {
+          "description": "मौजूदा क्यू को प्लेलिस्ट के रूप में सेव करें",
+          "options": {
+            "name": "प्लेलिस्ट का नाम"
+          }
+        }
+      }
+    },
+    "favorites": {
+      "name": "favorites",
+      "description": "अपने पसंदीदा गाने प्रबंधित करें",
+      "subcommands": {
+        "add": {
+          "description": "वर्तमान गाना या क्वेरी पसंदीदा में जोड़ें",
+          "options": {
+            "query": "गाने का नाम या URL (खाली = वर्तमान गाना)"
+          }
+        },
+        "remove": {
+          "description": "स्थिति से पसंदीदा हटाएँ",
+          "options": {
+            "index": "पसंदीदा स्थिति"
+          }
+        },
+        "list": {
+          "description": "अपने पसंदीदा दिखाएँ"
+        },
+        "play": {
+          "description": "अपने पसंदीदा बजाएँ"
+        }
+      }
+    },
+    "bassboost": {
+      "name": "bassboost",
+      "description": "bassboost फ़िल्टर टॉगल करें",
+      "options": {
+        "level": "स्तर: low, medium, high, या insane"
+      }
+    },
+    "nightcore": {
+      "name": "nightcore",
+      "description": "nightcore फ़िल्टर टॉगल करें"
+    },
+    "vaporwave": {
+      "name": "vaporwave",
+      "description": "vaporwave फ़िल्टर टॉगल करें"
+    },
+    "soft": {
+      "name": "soft",
+      "description": "soft फ़िल्टर टॉगल करें"
+    },
+    "8d": {
+      "name": "8d",
+      "description": "8D ऑडियो फ़िल्टर टॉगल करें"
+    },
+    "karaoke": {
+      "name": "karaoke",
+      "description": "karaoke फ़िल्टर टॉगल करें"
+    },
+    "tremolo": {
+      "name": "tremolo",
+      "description": "tremolo फ़िल्टर टॉगल करें"
+    },
+    "vibrato": {
+      "name": "vibrato",
+      "description": "vibrato फ़िल्टर टॉगल करें"
+    },
+    "distortion": {
+      "name": "distortion",
+      "description": "distortion फ़िल्टर टॉगल करें"
+    },
+    "lowpass": {
+      "name": "lowpass",
+      "description": "lowpass फ़िल्टर टॉगल करें"
+    },
+    "speed": {
+      "name": "speed",
+      "description": "प्लेबैक गति सेट करें",
+      "options": {
+        "value": "0.5 से 5.0 तक गति"
+      }
+    },
+    "pitch": {
+      "name": "pitch",
+      "description": "पिच सेट करें",
+      "options": {
+        "value": "0.5 से 5.0 तक पिच"
+      }
+    },
+    "eq": {
+      "name": "eq",
+      "description": "3 0 0 1 0 -1 जैसा कस्टम इक्वलाइज़र सेट करें",
+      "options": {
+        "bands": "-1 से 1 तक 15 गेन"
+      }
+    },
+    "filters": {
+      "name": "filters",
+      "description": "सक्रिय फ़िल्टर दिखाएँ"
+    },
+    "filtersreset": {
+      "name": "reset",
+      "description": "सभी फ़िल्टर रीसेट करें"
+    },
+    "settings": {
+      "name": "settings",
+      "description": "सर्वर सेटिंग दिखाएँ"
+    },
+    "prefix": {
+      "name": "prefix",
+      "description": "इस सर्वर के लिए कमांड प्रीफ़िक्स सेट करें",
+      "options": {
+        "prefix": "नया प्रीफ़िक्स, अधिकतम 5 अक्षर"
+      }
+    },
+    "language": {
+      "name": "language",
+      "description": "इस सर्वर के लिए बॉट भाषा सेट करें",
+      "options": {
+        "language": "उपयोग करने के लिए भाषा"
+      }
+    },
+    "djrole": {
+      "name": "djrole",
+      "description": "DJ रोल प्रबंधित करें",
+      "subcommands": {
+        "add": {
+          "description": "DJ रोल जोड़ें",
+          "options": {
+            "role": "रोल"
+          }
+        },
+        "remove": {
+          "description": "DJ रोल हटाएँ",
+          "options": {
+            "role": "रोल"
+          }
+        },
+        "list": {
+          "description": "DJ रोल दिखाएँ"
+        }
+      }
+    },
+    "botchannel": {
+      "name": "botchannel",
+      "description": "संगीत कमांड विशिष्ट चैनलों तक सीमित करें",
+      "subcommands": {
+        "add": {
+          "description": "चैनल की अनुमति दें",
+          "options": {
+            "channel": "चैनल"
+          }
+        },
+        "remove": {
+          "description": "चैनल अस्वीकारें",
+          "options": {
+            "channel": "चैनल"
+          }
+        },
+        "clear": {
+          "description": "सभी चैनलों की अनुमति दें"
+        }
+      }
+    },
+    "defaultvolume": {
+      "name": "defaultvolume",
+      "description": "इस सर्वर के लिए डिफ़ॉल्ट वॉल्यूम सेट करें",
+      "options": {
+        "level": "0 से 150 तक वॉल्यूम"
+      }
+    },
+    "idletimeout": {
+      "name": "idletimeout",
+      "description": "निष्क्रिय होने पर जाने से पहले कितना प्रतीक्षा करें सेट करें",
+      "options": {
+        "minutes": "मिनट, अक्षम करने के लिए 0"
+      }
+    },
+    "help": {
+      "name": "help",
+      "description": "सहायता मेनू दिखाएँ"
+    },
+    "ping": {
+      "name": "ping",
+      "description": "बॉट विलंबता दिखाएँ"
+    },
+    "stats": {
+      "name": "stats",
+      "description": "बॉट सांख्यिकी दिखाएँ"
+    },
+    "invite": {
+      "name": "invite",
+      "description": "बॉट आमंत्रण लिंक प्राप्त करें"
+    },
+    "about": {
+      "name": "about",
+      "description": "Slux के बारे में जानकारी दिखाएँ"
+    },
+    "skipto": {
+      "description": "क्यू में किसी खास ट्रैक पर सीधे जाएँ",
+      "options": {
+        "index": "जिस स्थान पर जाना है"
+      }
+    },
+    "removeduplicates": {
+      "description": "क्यू से डुप्लिकेट ट्रैक हटाएँ"
+    },
+    "sleep": {
+      "description": "निर्धारित समय बाद प्लेबैक रोकें (स्लीप टाइमर)",
+      "options": {
+        "minutes": "कितने मिनट बाद रोकना है (रद्द करने के लिए 0 या off)"
+      }
+    },
+    "nodes": {
+      "description": "म्यूज़िक नोड्स की स्थिति दिखाएँ"
+    },
+    "developer": {
+      "description": "Slux के डेवलपर से मिलें"
+    }
+  },
+  "music": {
+    "nowPlaying": "अब बज रहा है",
+    "searching": "खोज रहे हैं...",
+    "added": "**{title}** क्यू में जोड़ा गया",
+    "addedAt": "**{title}** क्यू की स्थिति #{position} पर जोड़ा गया",
+    "addedPlaylist": "**{name}** से **{count}** ट्रैक क्यू में जोड़े गए",
+    "selectPrompt": "एक ट्रैक चुनें — `{query}` के परिणाम",
+    "selectButton": "चुनें",
+    "cancelButton": "रद्द करें",
+    "paused": "प्लेयर रोक दिया गया।",
+    "resumed": "प्लेयर जारी रखा गया।",
+    "alreadyPaused": "प्लेयर पहले से रुका हुआ है।",
+    "notPaused": "प्लेयर रुका हुआ नहीं है।",
+    "stopped": "प्लेयर बंद कर दिया गया और चैनल छोड़ दिया।",
+    "skipped": "**{title}** छोड़ दिया गया।",
+    "noPrevious": "कोई पिछला गाना नहीं है।",
+    "previousNow": "अब पिछला गाना बज रहा है।",
+    "queueTitle": "{guild} की क्यू",
+    "queueNowPlaying": "**अब बज रहा है** — [{title}]({uri}) `{duration}`",
+    "queueUpNext": "आगे आने वाला",
+    "queueFooter": "{count} ट्रैक • कुल {duration}",
+    "npLength": "अवधि",
+    "npPosition": "स्थिति",
+    "npVolume": "वॉल्यूम",
+    "npLoop": "लूप",
+    "npFilters": "फ़िल्टर",
+    "live": "लाइव",
+    "stream": "लाइव स्ट्रीम",
+    "removed": "**{title}** क्यू से हटा दिया गया।",
+    "invalidIndex": "स्थिति #{index} पर कोई ट्रैक नहीं है।",
+    "cleared": "क्यू साफ़ कर दी गई ({count} ट्रैक)।",
+    "moved": "**{title}** को #{from} से #{to} पर स्थानांतरित किया गया।",
+    "shuffled": "क्यू शफ़ल कर दी गई ({count} ट्रैक)।",
+    "loopOff": "लूप अब **बंद** है।",
+    "loopTrack": "अब **वर्तमान ट्रैक** लूप हो रहा है।",
+    "loopQueue": "अब **क्यू** लूप हो रही है।",
+    "volumeSet": "वॉल्यूम **{level}%** पर सेट।",
+    "volumeCurrent": "वॉल्यूम अभी **{level}%** है।",
+    "seeked": "**{position}** पर जाया गया।",
+    "seekInvalid": "अमान्य स्थिति — गाना केवल {length} लंबा है।",
+    "forwarded": "**{position}** पर आगे बढ़े।",
+    "rewound": "**{position}** पर पीछे गए।",
+    "joined": "**{channel}** में शामिल हुए।",
+    "joinFailed": "मैं उस वॉइस चैनल में शामिल नहीं हो सका।",
+    "replaying": "वर्तमान गाना फिर से बज रहा है।",
+    "grabTitle": "गाना प्राप्त किया",
+    "grabDmed": "मैंने आपको वर्तमान गाना DM में भेज दिया।",
+    "grabDmFailed": "मैं आपको DM नहीं कर सका — कृपया सर्वर सदस्यों से DM सक्षम करें।",
+    "lyricsTitle": "{title} के बोल",
+    "lyricsNone": "वर्तमान गाने के लिए कोई बोल नहीं मिले।",
+    "autoplayOn": "ऑटोप्ले अब **सक्रिय** है — मैं संबंधित गाने बजाता रहूँगा।",
+    "autoplayOff": "ऑटोप्ले अब **निष्क्रिय** है।",
+    "stayOn": "24/7 मोड अब **सक्रिय** है — मैं चैनल में रहूँगा।",
+    "stayOff": "24/7 मोड अब **निष्क्रिय** है।",
+    "djmodeOn": "DJ मोड अब **सक्रिय** है — केवल वॉइस चैनल के श्रोता मुझे नियंत्रित कर सकते हैं।",
+    "djmodeOff": "DJ मोड अब **निष्क्रिय** है।",
+    "djmodeActive": "DJ मोड सक्रिय है — केवल वॉइस चैनल के श्रोता मुझे नियंत्रित कर सकते हैं।",
+    "leftIdle": "निष्क्रियता के कारण चैनल छोड़ दिया।",
+    "leftAlone": "सभी चले गए इसलिए चैनल छोड़ दिया।",
+    "notSeekable": "इस ट्रैक में सीक नहीं किया जा सकता।",
+    "queueEnded": "क्यू समाप्त हो गई है।",
+    "pausedLabel": "रुका हुआ",
+    "addedTitle": "क्यू में जोड़ा गया",
+    "addedTopTitle": "ऊपर जोड़ा गया",
+    "skipPlayTitle": "इस पर जा रहे हैं",
+    "playlistAddedTitle": "प्लेलिस्ट जोड़ी गई",
+    "queuePosition": "स्थान",
+    "queueTotal": "क्यू",
+    "totalDuration": "कुल अवधि",
+    "searchResultsTitle": "खोज परिणाम",
+    "selectFooter": "नीचे एक ट्रैक चुनें",
+    "selectPlaceholder": "ट्रैक चुनें…",
+    "stoppedTitle": "रुक गया",
+    "skippedTitle": "छोड़ दिया",
+    "previousTitle": "पिछला ट्रैक",
+    "queueJumpTo": "पेज पर जाएँ…",
+    "queuePageOption": "पेज {page}",
+    "npProgress": "प्रगति",
+    "removedTitle": "हटाया गया",
+    "clearedTitle": "क्यू खाली की गई",
+    "movedTitle": "ट्रैक हिलाया गया",
+    "shuffledTitle": "शफ़ल की गई",
+    "loopTitle": "लूप मोड",
+    "loopCurrent": "लूप मोड है {mode}",
+    "loopModeOff": "बंद",
+    "loopModeTrack": "ट्रैक",
+    "loopModeQueue": "क्यू",
+    "volumeTitle": "वॉल्यूम",
+    "volDown": "वॉल्यूम −10",
+    "volUp": "वॉल्यूम +10",
+    "volMute": "म्यूट",
+    "pausedTitle": "रुका हुआ",
+    "resumedTitle": "फिर चालू",
+    "seekedTitle": "स्थान बदला गया",
+    "forwardedTitle": "आगे बढ़ाया",
+    "rewoundTitle": "पीछे किया",
+    "replayingTitle": "फिर से चल रहा है",
+    "joinedTitle": "जुड़ गया",
+    "grabSource": "स्रोत",
+    "lyricsSynced": "सिंक्ड",
+    "lyricsPlain": "सादा",
+    "autoplayLabel": "ऑटोप्ले",
+    "djmodeLabel": "DJ मोड",
+    "ctrlPrevious": "पिछला",
+    "ctrlPause": "रोकें",
+    "ctrlResume": "जारी रखें",
+    "ctrlSkip": "छोड़ें",
+    "ctrlLoop": "लूप",
+    "ctrlStop": "बंद करें",
+    "ctrlShuffle": "शफ़ल",
+    "ctrlQueue": "क्यू",
+    "ctrlLyrics": "बोल",
+    "ctrlVolDown": "वॉल्यूम −10",
+    "ctrlVolUp": "वॉल्यूम +10",
+    "engineNotReady": "म्यूज़िक इंजन अभी जुड़ा नहीं है — Lavalink अभी शुरू हो रहा है या पहुँच योग्य नहीं है। एक मिनट में फिर कोशिश करें (बॉट कंसोल देखें)।",
+    "skiptoTitle": "ट्रैक पर पहुँच गए",
+    "skiptoDone": "सीधे स्थान {index} पर पहुँच गए — उससे पहले का सब हटा दिया गया।",
+    "removedDuplicatesTitle": "डुप्लिकेट हटाए गए",
+    "removedDuplicates": "क्यू से **{count}** डुप्लिकेट ट्रैक हटाए गए।",
+    "noDuplicates": "कोई डुप्लिकेट ट्रैक नहीं मिला — आपकी क्यू साफ़ है!",
+    "sleepTitle": "स्लीप टाइमर",
+    "sleepSet": "मैं {minutes} मिनट में प्लेबैक रोक दूँगा।",
+    "sleepCancelled": "स्लीप टाइमर रद्द किया गया।",
+    "sleepStatus": "प्लेबैक {minutes} मिनट में रुकेगा।",
+    "sleepNone": "कोई स्लीप टाइमर सेट नहीं है। `sleep <मिनट>` से सेट करें।"
+  },
+  "playlists": {
+    "created": "प्लेलिस्ट **{name}** बनाई गई।",
+    "deleted": "प्लेलिस्ट **{name}** हटा दी गई।",
+    "renamed": "प्लेलिस्ट **{old}** का नाम **{new}** कर दिया गया।",
+    "notFound": "आपकी **{name}** नाम की कोई प्लेलिस्ट नहीं है।",
+    "exists": "आपके पास पहले से **{name}** नाम की प्लेलिस्ट है।",
+    "nameTooLong": "प्लेलिस्ट का नाम अधिकतम 64 अक्षरों का हो सकता है।",
+    "addedTracks": "**{name}** में **{count}** ट्रैक जोड़े गए।",
+    "addedCurrent": "**{title}** को **{name}** में जोड़ा गया।",
+    "noCurrent": "कुछ नहीं बज रहा — गाने का नाम या URL दें।",
+    "removedTrack": "**{title}** को **{name}** से हटाया गया।",
+    "listTitle": "आपकी प्लेलिस्ट",
+    "listEmpty": "आपके पास अभी कोई प्लेलिस्ट नहीं है।",
+    "infoTitle": "प्लेलिस्ट: {name}",
+    "infoFooter": "{count} ट्रैक • {duration} • {visibility}",
+    "public": "सार्वजनिक",
+    "private": "निजी",
+    "loaded": "**{name}** से **{count}** ट्रैक लोड किए गए।",
+    "empty": "प्लेलिस्ट **{name}** खाली है।",
+    "limitReached": "प्लेलिस्ट में अधिकतम {limit} ट्रैक हो सकते हैं।",
+    "tooManyToAdd": "इससे प्लेलिस्ट की सीमा {limit} पार हो जाएगी।",
+    "favorites": "पसंदीदा",
+    "favoritesEmpty": "आपके पास अभी कोई पसंदीदा नहीं है।",
+    "favoritesAdded": "**{title}** को आपके पसंदीदा में जोड़ा गया।",
+    "favoritesRemoved": "**{title}** को आपके पसंदीदा से हटाया गया।",
+    "favoritesLoaded": "**{count}** पसंदीदा लोड किए गए।",
+    "owner": "स्वामी",
+    "createdTitle": "प्लेलिस्ट बनाई गई",
+    "deletedTitle": "प्लेलिस्ट हटाई गई",
+    "renamedTitle": "प्लेलिस्ट का नाम बदला",
+    "addedTitle": "ट्रैक जोड़ा गया",
+    "removedTrackTitle": "ट्रैक हटाया गया",
+    "visibilityTitle": "दृश्यता बदली गई",
+    "loadedTitle": "प्लेलिस्ट लोड हुई",
+    "savedQueueTitle": "क्यू सेव हुई",
+    "savedQueue": "मौजूदा क्यू ({count} ट्रैक) प्लेलिस्ट **{name}** में सेव हुई।",
+    "savedQueueUpdated": "प्लेलिस्ट **{name}** मौजूदा क्यू ({count} ट्रैक) के साथ अपडेट हुई।",
+    "nothingToSave": "कुछ भी नहीं बज रहा — सेव करने के लिए कोई क्यू नहीं है।"
+  },
+  "filters": {
+    "applied": "फ़िल्टर **{name}** लागू हुआ।",
+    "removed": "फ़िल्टर **{name}** हटाया गया।",
+    "reset": "सभी फ़िल्टर रीसेट कर दिए गए।",
+    "listTitle": "सक्रिय फ़िल्टर",
+    "listNone": "कोई फ़िल्टर सक्रिय नहीं है।",
+    "invalidLevel": "स्तर इनमें से एक होना चाहिए: low, medium, high, insane।",
+    "invalidValue": "मान {min} और {max} के बीच होना चाहिए।",
+    "eqApplied": "कस्टम इक्वलाइज़र लागू हुआ।",
+    "eqUsage": "उपयोग: `{prefix}eq <-1 से 1 तक 15 गेन>` — जैसे `{prefix}eq 0.3 0.3 0.2 0 -0.2 0 0 0 0 0 0 0 0 0 0`",
+    "appliedTitle": "फ़िल्टर लागू",
+    "removedTitle": "फ़िल्टर हटाया",
+    "resetTitle": "फ़िल्टर रीसेट",
+    "resetAll": "सभी फ़िल्टर रीसेट करें",
+    "openPanel": "फ़िल्टर पैनल",
+    "panelTitle": "ऑडियो फ़िल्टर",
+    "panelHint": "फ़िल्टर चुनकर चालू/बंद करें — तुरंत लागू होता है।",
+    "pickPlaceholder": "फ़िल्टर टॉगल करें…",
+    "stateOn": "चालू — बंद करने के लिए चुनें",
+    "stateOff": "बंद — चालू करने के लिए चुनें"
+  },
+  "settings": {
+    "247": "डिफ़ॉल्ट 24/7",
+    "title": "{guild} की सेटिंग",
+    "prefix": "प्रीफ़िक्स",
+    "language": "भाषा",
+    "djRoles": "DJ रोल",
+    "botChannels": "अनुमत चैनल",
+    "defaultVolume": "डिफ़ॉल्ट वॉल्यूम",
+    "autoplay": "डिफ़ॉल्ट ऑटोप्ले",
+    "idleTimeout": "निष्क्रियता समयबद्धता",
+    "allChannels": "सभी चैनल",
+    "noTimeout": "अक्षम",
+    "prefixSet": "प्रीफ़िक्स `{prefix}` पर सेट।",
+    "prefixInvalid": "प्रीफ़िक्स 1-5 अक्षरों का होना चाहिए और उसमें स्पेस नहीं हो सकते।",
+    "languageSet": "भाषा **{language}** पर सेट।",
+    "languageInvalid": "उपलब्ध भाषाएँ: {languages}।",
+    "djRoleAdded": "**{role}** अब DJ रोल है।",
+    "djRoleRemoved": "**{role}** अब DJ रोल नहीं है।",
+    "djRoleNotSet": "**{role}** DJ रोल नहीं है।",
+    "djRoleList": "DJ रोल: {roles}",
+    "djRoleNone": "कोई DJ रोल सेट नहीं है।",
+    "botChannelAdded": "संगीत कमांड अब **{channel}** तक सीमित हैं।",
+    "botChannelRemoved": "**{channel}** को अनुमत चैनलों से हटा दिया गया।",
+    "botChannelNotSet": "**{channel}** अनुमत चैनलों में नहीं है।",
+    "botChannelCleared": "संगीत कमांड अब सभी चैनलों में अनुमत हैं।",
+    "defaultVolumeSet": "डिफ़ॉल्ट वॉल्यूम **{level}%** पर सेट।",
+    "idleTimeoutSet": "निष्क्रियता समयबद्धता **{minutes}** मिनट पर सेट।",
+    "idleTimeoutDisabled": "निष्क्रियता समयबद्धता अक्षम — रुकने तक मैं रहूँगा।"
+  },
+  "info": {
+    "helpTitle": "Slux — सहायता",
+    "helpDescription": "एक सुविधा संपन्न संगीत बॉट। स्लैश कमांड या `{prefix}` प्रीफ़िक्स का उपयोग करें।",
+    "helpFields": {
+      "music": "संगीत",
+      "playlists": "प्लेलिस्ट",
+      "filters": "फ़िल्टर",
+      "settings": "सेटिंग",
+      "info": "जानकारी"
+    },
+    "helpFooter": "सभी कमांड डैशबोर्ड पर देखें",
+    "pingTitle": "पोंग!",
+    "pingWebsocket": "वेबसॉकेट",
+    "pingRoundtrip": "राउंडट्रिप",
+    "pingLavalink": "लावालिंक",
+    "statsTitle": "Slux — सांख्यिकी",
+    "statsServers": "सर्वर",
+    "statsPlayers": "सक्रिय प्लेयर",
+    "statsUsers": "उपयोगकर्ता",
+    "statsUptime": "अपटाइम",
+    "statsMemory": "मेमोरी",
+    "statsNode": "लावालिंक नोड",
+    "statsNodePenalties": "नोड पेनल्टी",
+    "inviteTitle": "Slux को आमंत्रित करें",
+    "inviteDescription": "अपने सर्वर में Slux जोड़ने के लिए नीचे बटन पर क्लिक करें।",
+    "aboutTitle": "Slux के बारे में",
+    "aboutDescription": "Slux एक मुफ़्त, सुविधा संपन्न Discord संगीत बॉट है जिसमें Spotify, YouTube, SoundCloud, Deezer, Apple Music और बहुत कुछ शामिल है — साथ में रियल-टाइम वेब डैशबोर्ड।",
+    "aboutFooter": "♥ के साथ बनाया गया — हमेशा मुफ़्त, कोई प्रीमियम नहीं",
+    "helpPickCategory": "कमांड श्रेणी चुनें…",
+    "helpCategoryCount": "{count} कमांड",
+    "helpAndMore": "+{count} और",
+    "helpCommandsTitle": "कमांड",
+    "pingStatus": "कनेक्शन स्थिति",
+    "inviteButton": "Slux को इनवाइट करें",
+    "dashboardButton": "डैशबोर्ड खोलें",
+    "aboutSources": "स्रोत",
+    "aboutFeatures": "खास बातें",
+    "nodesTitle": "म्यूज़िक नोड्स",
+    "nodesActive": "सक्रिय नोड: {name}",
+    "nodeConnected": "जुड़ा हुआ",
+    "nodeConnecting": "जुड़ रहा है…",
+    "nodeDisconnecting": "अलग हो रहा है…",
+    "nodeDisconnected": "बंद",
+    "nodePlayers": "प्लेयर",
+    "nodeCpu": "CPU",
+    "developerTitle": "SHM द्वारा निर्मित",
+    "developerDescription": "Slux को **SHM** ने डिज़ाइन, बनाया और संभाला है। हर फ़ीचर — प्लेयर इंजन, फ़िल्टर, डैशबोर्ड और बोल — प्यार से बनाया गया है।",
+    "developerRole": "निर्माता और डेवलपर",
+    "developerWorkTitle": "प्रोजेक्ट",
+    "developerWork": "ऐसे प्रोजेक्ट्स के बिल्ड वीडियो, डेव लॉग्स और ट्यूटोरियल के लिए YouTube पर **@Letzforge** को फॉलो करें।",
+    "developerFooter": "SHM द्वारा ❤️ से बनाया गया"
+  },
+  "dashboard": {
+    "nav": {
+      "player": "प्लेयर",
+      "settings": "सेटिंग",
+      "playlists": "प्लेलिस्ट",
+      "backToSite": "साइट पर वापस",
+      "logout": "लॉग आउट",
+      "dashboard": "डैशबोर्ड",
+      "commands": "कमांड",
+      "theme": "थीम"
+    },
+    "landing": {
+      "badge": "हमेशा मुफ़्त — कोई प्रीमियम नहीं",
+      "title": "संगीत जो कभी बीट नहीं छोड़ता",
+      "subtitle": "Slux एक सुविधा संपन्न Discord संगीत बॉट है जिसमें Spotify, YouTube, SoundCloud, Deezer और Apple Music समर्थन है — साथ में अपने ब्राउज़र से सब कुछ नियंत्रित करने के लिए रियल-टाइम डैशबोर्ड।",
+      "addDiscord": "Discord में जोड़ें",
+      "openDashboard": "डैशबोर्ड खोलें",
+      "featuresTitle": "जो कुछ आपको चाहिए",
+      "featuresSubtitle": "सभी सुविधाएँ, सबके लिए मुफ़्त। यही Slux का वादा है।",
+      "sourcesTitle": "आपके सभी स्रोत",
+      "sourcesDescription": "Spotify, YouTube, SoundCloud, Deezer, Apple Music, Tidal और YouTube Music से खोजें और बजाएँ।",
+      "filtersTitle": "स्टूडियो-स्तरीय फ़िल्टर",
+      "filtersDescription": "Bassboost, nightcore, vaporwave, 8D, karaoke और पूरा 15-बैंड इक्वलाइज़र।",
+      "playlistsTitle": "शक्तिशाली प्लेलिस्ट",
+      "playlistsDescription": "अपने पसंदीदा ट्रैक सहेजें, प्लेलिस्ट आयात करें और एक कमांड में लोड करें।",
+      "lyricsTitle": "सिंक्ड बोल",
+      "lyricsDescription": "Discord या डैशबोर्ड पर समय-सिंक्ड बोल के साथ साथ गाएँ।",
+      "dashboardTitle": "रियल-टाइम डैशबोर्ड",
+      "dashboardDescription": "अपने ब्राउज़र से प्लेबैक नियंत्रित करें, क्यू प्रबंधित करें और बॉट कॉन्फ़िगर करें।",
+      "autoplayTitle": "ऑटोप्ले और 24/7",
+      "autoplayDescription": "Slux संबंधित ट्रैक के साथ संगीत जारी रखता है और पूरे दिन वॉइस में रह सकता है।",
+      "i18nTitle": "आपकी भाषा बोलता है",
+      "i18nDescription": "अंग्रेज़ी, हिन्दी, स्पेनिश, फ़्रेंच, जर्मन और पुर्तगाली पहले से शामिल।",
+      "statsServers": "सर्वर",
+      "statsPlayers": "सक्रिय प्लेयर",
+      "statsTracks": "ट्रैक बजाए गए",
+      "ctaTitle": "अपने सर्वर की ध्वनि अपग्रेड करने के लिए तैयार?",
+      "ctaSubtitle": "Slux को एक मिनट में जोड़ें। कोई सेटअप नहीं, कोई प्रीमियम नहीं, कोई सीमा नहीं।"
+    },
+    "commands": {
+      "title": "कमांड",
+      "subtitle": "सब कुछ जो Slux कर सकता है — {count} कमांड में",
+      "search": "कमांड खोजें...",
+      "noResults": "कोई कमांड आपकी खोज से मेल नहीं खाती।",
+      "usage": "उपयोग"
+    },
+    "guilds": {
+      "title": "आपके सर्वर",
+      "subtitle": "प्रबंधित करने के लिए एक सर्वर चुनें",
+      "invite": "आमंत्रित करें",
+      "manage": "प्रबंधित करें",
+      "empty": "Manage Server अनुमति वाला कोई सर्वर नहीं मिला।"
+    },
+    "settings": {
+      "title": "सेटिंग",
+      "general": "सामान्य",
+      "playback": "प्लेबैक",
+      "dj": "DJ",
+      "prefix": "कमांड प्रीफ़िक्स",
+      "prefixDescription": "टेक्स्ट कमांड के लिए प्रीफ़िक्स",
+      "language": "भाषा",
+      "languageDescription": "बॉट प्रतिक्रियाओं की भाषा",
+      "defaultVolume": "डिफ़ॉल्ट वॉल्यूम",
+      "defaultVolumeDescription": "प्लेयर शुरू होने पर वॉल्यूम",
+      "autoplay": "ऑटोप्ले",
+      "autoplayDescription": "क्यू समाप्त होने पर संबंधित ट्रैक बजाते रहें",
+      "stay247": "24/7 मोड",
+      "stay247Description": "अकेले या निष्क्रिय होने पर वॉइस चैनल में रहें",
+      "idleTimeout": "निष्क्रियता समयबद्धता",
+      "idleTimeoutDescription": "इतने मिनट निष्क्रिय रहने पर चले जाएँ (0 = कभी नहीं)",
+      "djRoles": "DJ रोल",
+      "djRolesDescription": "वे रोल जो DJ कमांड उपयोग कर सकते हैं",
+      "botChannels": "अनुमत चैनल",
+      "botChannelsDescription": "संगीत कमांड इन चैनलों तक सीमित करें",
+      "allChannels": "सभी चैनल अनुमत हैं",
+      "save": "परिवर्तन सहेजें",
+      "saved": "सेटिंग सहेज ली गईं",
+      "saveFailed": "सेटिंग सहेजने में विफल",
+      "notAvailable": "सर्वर उपलब्ध नहीं — क्या बॉट उसमें है?"
+    },
+    "player": {
+      "title": "प्लेयर",
+      "notConnected": "जुड़ा नहीं है",
+      "notConnectedDescription": "Slux वॉइस चैनल में नहीं है। सुनना शुरू करने के लिए एक चैनल चुनें।",
+      "join": "चैनल में शामिल हों",
+      "nowPlaying": "अब बज रहा है",
+      "nothingPlaying": "कुछ नहीं बज रहा",
+      "queue": "क्यू",
+      "queueEmpty": "क्यू खाली है — कुछ खोजें!",
+      "lyrics": "बोल",
+      "noLyrics": "इस ट्रैक के लिए कोई बोल उपलब्ध नहीं।",
+      "searchPlaceholder": "खोजें या लिंक पेस्ट करें...",
+      "play": "बजाएँ",
+      "pause": "रोकें",
+      "resume": "जारी रखें",
+      "previous": "पिछला",
+      "skip": "छोड़ें",
+      "stop": "रोकें",
+      "shuffle": "शफ़ल",
+      "loop": "लूप",
+      "volume": "वॉल्यूम",
+      "autoplay": "ऑटोप्ले",
+      "clear": "क्यू साफ़ करें",
+      "remove": "हटाएँ",
+      "moveTop": "ऊपर ले जाएँ",
+      "added": "क्यू में जोड़ा गया",
+      "live": "लाइव",
+      "lyricsSynced": "सिंक्ड",
+      "lyricsPlain": "सादा",
+      "autoScroll": "ऑटो-स्क्रॉल",
+      "history": "इतिहास",
+      "historyEmpty": "इतिहास अभी खाली है।",
+      "replay": "फिर से चलाएँ",
+      "filtersTab": "फ़िल्टर",
+      "filtersNone": "कोई फ़िल्टर चालू नहीं है।",
+      "filtersReset": "फ़िल्टर रीसेट करें",
+      "seekHint": "सीक करने के लिए खींचें",
+      "requestedBy": "अनुरोधकर्ता",
+      "playingIn": "बज रहा है"
+    },
+    "playlists": {
+      "title": "आपकी प्लेलिस्ट",
+      "subtitle": "आपके सहेजे संग्रह, किसी भी सर्वर पर उपलब्ध",
+      "create": "नई प्लेलिस्ट",
+      "createTitle": "प्लेलिस्ट बनाएँ",
+      "namePlaceholder": "प्लेलिस्ट का नाम",
+      "descriptionPlaceholder": "विवरण (वैकल्पिक)",
+      "createCta": "बनाएँ",
+      "delete": "प्लेलिस्ट हटाएँ",
+      "deleteConfirm": "प्लेलिस्ट \"{name}\" हटाएँ? इसे पूर्ववत नहीं किया जा सकता।",
+      "public": "सार्वजनिक",
+      "private": "निजी",
+      "tracks": "ट्रैक",
+      "empty": "अभी कोई प्लेलिस्ट नहीं — अपनी पहली बनाएँ!",
+      "loadToGuild": "एक सर्वर में बजाएँ",
+      "removeTrack": "ट्रैक हटाएँ",
+      "created": "प्लेलिस्ट बन गई",
+      "deleted": "प्लेलिस्ट हटा दी गई",
+      "emptyPlaylist": "यह प्लेलिस्ट खाली है।"
+    },
+    "auth": {
+      "login": "Discord से लॉगिन करें",
+      "loginRequired": "लॉगिन आवश्यक",
+      "loginRequiredDescription": "डैशबोर्ड तक पहुँचने के लिए आपको Discord से लॉगिन करना होगा।"
+    },
+    "user": {
+      "loggedInAs": "इस रूप में लॉगिन है"
+    }
+  }
+}
