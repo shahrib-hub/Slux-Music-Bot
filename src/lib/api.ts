@@ -1,5 +1,7 @@
 "use client";
 
+import type { ManagerOptions } from "socket.io-client";
+
 /**
  * Client-side API helpers.
  *
@@ -24,11 +26,20 @@ export function apiFetch(path: string, init?: RequestInit): Promise<Response> {
   return fetch(apiUrl(path), { ...init, credentials: "include" });
 }
 
-/** Socket.io connection options pointing at the backend. */
-export const socketOptions = {
+/** Socket.io connection options.
+ *
+ * WebSocket-only transport: socket.io's default flow starts with HTTP
+ * long-polling and upgrades later, but long-poll requests get cut by the
+ * Vercel rewrite proxy — the connection flaps or dies while REST works.
+ * A pure websocket upgrade is proxied reliably by Vercel rewrites.
+ *
+ * Unlimited reconnection: a backend restart (e.g. panel reboot) can outlast
+ * a bounded attempt budget — without this the socket stays dead until the
+ * page is refreshed. */
+export const socketOptions: Partial<ManagerOptions> = {
   path: "/socket.io",
-  withCredentials: true as const,
-  reconnectionAttempts: 8,
+  withCredentials: true,
+  transports: ["websocket"],
   reconnectionDelay: 1000,
   reconnectionDelayMax: 10000,
 };

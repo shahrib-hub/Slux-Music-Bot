@@ -11811,7 +11811,16 @@ async function main() {
     ];
     io = new SocketIOServer(httpServer, {
       path: "/socket.io",
-      cors: { origin: socketOrigins, credentials: true }
+      cors: {
+        origin: (origin, cb) => {
+          if (!origin || socketOrigins.includes(origin)) return cb(null, true);
+          console.warn(
+            `[slux] Socket handshake rejected for origin ${origin}. Allowed: ${socketOrigins.join(", ")}. Set APP_URL (or DASHBOARD_URL) to the dashboard's public URL.`
+          );
+          return cb(null, false);
+        },
+        credentials: true
+      }
     });
     dashboard = io.of("/dashboard");
     dashboard.use(async (socket, next) => {
