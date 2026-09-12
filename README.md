@@ -91,15 +91,17 @@ Panels that run `node /home/container/${JS_FILE}` can't run TypeScript — build
 1. On your machine:
    ```powershell
    pnpm install
-   pnpm build:server     # → dist/server.js
+   pnpm build:server     # → dist/server.js + dist/package.json (runtime-only manifest)
    ```
-2. Upload `dist/` (plus `package.json`, and your `.env`) to the container; set `JS_FILE=dist/server.js`, `AUTO_UPDATE=0`, `NODE_ENV=production`, `HOST=0.0.0.0`, `PORT=<allocated port>`, and use a Node 20+ image.
-3. Let the panel's `npm install` finish (retry if OOM-killed; delete a partially killed `node_modules` and retry — the runtime needs only the production dependencies).
+2. Upload `dist/` (server.js + package.json) and your `.env` to the container; set `JS_FILE=dist/server.js`, `AUTO_UPDATE=0`, `NODE_ENV=production`, `HOST=0.0.0.0`, `PORT=<allocated port>`, and use a Node 20+ image.
+   - **Use `dist/package.json` as the container's package.json** — it lists only the 8 runtime packages the backend imports (~65 packages / ~35MB installed). Uploading the repo's full `package.json` instead would make the panel's `npm install` pull the entire frontend + dev tree (~800 packages, ~450MB) — slow, disk-hungry, and the likely OOM cause on 1GB containers.
+   - No `.next/`, no source code, no TypeScript, no build tools ever go on the container — Vercel builds and serves the whole frontend.
+3. Let the panel's `npm install` finish (retry if killed; delete a partially killed `node_modules` and retry).
 4. Backend env (see `.env.example`): `DISCORD_TOKEN`, `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET`, `SESSION_SECRET`, `MONGODB_URI` (Atlas), `LAVALINK_*`, and:
    - `APP_URL=https://<your-vercel-url>` — the **public** URL browsers use (Vercel proxies to the backend)
    - `DASHBOARD_ENABLED=false` — optional: run a pure bot; no API/socket/dashboard links, OAuth secrets unnecessary
 
-The container's `IP:PORT` allocation is what Vercel will proxy to.
+The container's `IP:PORT` allocation is what Vercel will proxy to. Disk usage on the panel stays at roughly: `dist/` (~0.5MB) + `.env` + `node_modules` (~35MB) + npm's cache (grows slowly — `npm cache clean --force` reclaims it if it balloons).
 
 ### 2. Frontend on Vercel
 
