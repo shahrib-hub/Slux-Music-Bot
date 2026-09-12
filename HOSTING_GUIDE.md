@@ -126,14 +126,12 @@ Use `/nodes` in Discord anytime to check live node status.
 
 ## 7. Wispbyte backend setup
 
-> **Git-driven:** after the one-time setup below, pushing to GitHub updates the backend automatically — `dist/` is committed to the repo, and the startup command pulls it on every boot. No more manual uploads.
-
 ### 7.1 Create the server
 
 1. In Wispbyte, create a server with the **Node.js** egg (Node 20+ image — e.g. `ghcr.io/parkervcp/yolks:nodejs_24`).
 2. Note the **allocation IP:PORT** (e.g. `78.154.103.53:9944`) — this is your **backend address** for `vercel.json`.
 
-### 7.2 Build locally (on your machine, for each release)
+### 7.2 Build locally (on your machine)
 
 ```bash
 git clone <your-slux-repo>     # or use your existing copy
@@ -142,26 +140,26 @@ pnpm install
 pnpm build:server
 ```
 
-This produces `dist/server.js` (the whole backend, ~0.5 MB) and `dist/package.json` (a **runtime-only** manifest — 8 packages → ~65 packages / ~35 MB installed). **Commit `dist/` with your changes** — it is no longer gitignored. The frontend build (`pnpm build`) is not needed locally; Vercel builds it itself.
+This produces:
 
-### 7.3 One-time container setup (Wispbyte console)
+- `dist/server.js` — the entire backend, bundled (~0.5 MB)
+- `dist/package.json` — a **runtime-only** manifest (8 packages → ~65 packages / ~35 MB installed). Uploading the repo's full `package.json` instead would make the panel's `npm install` pull ~800 packages / ~450 MB and likely get OOM-killed on 1 GB containers. **Always use `dist/package.json`.**
 
-Run once in the panel's console (replaces the old manual-upload files with the git checkout; `.env` is untouched):
+### 7.3 Upload to the container
 
-```bash
-cd /home/container
-rm -rf node_modules dist
-git init
-git remote add origin https://github.com/YOUR-USERNAME/YOUR-REPO.git
-git fetch origin
-git checkout -f main        # use 'master' if that's your default branch
+Upload into `/home/container` (directly, not in a subfolder):
+
+```
+dist/server.js        → /home/container/dist/server.js
+dist/package.json     → /home/container/package.json      (the container's package.json)
+.env                  → /home/container/.env              (create it, see below)
 ```
 
-Then create `/home/container/.env` (see §7.4) if you haven't already.
+Nothing else is needed — no source code, no `.next/`, no TypeScript, no build tools. The container stays around ~36 MB.
 
-### 7.4 The backend `.env`
+### 7.4 Create the backend `.env`
 
-`/home/container/.env` (untracked by git — stays across pulls):
+`/home/container/.env`:
 
 ```env
 NODE_ENV=production
@@ -196,23 +194,18 @@ LAVALINK_NAME=main
 
 ### 7.5 Panel startup configuration
 
-In the Wispbyte **Startup** tab, replace the startup command with:
-
-```bash
-cd /home/container; git pull --ff-only origin main 2>&1 | tail -1; if [ ! -f dist/.installed ] || ! diff -q dist/package.json dist/.installed >/dev/null 2>&1; then (cd dist && (npm install --omit=dev --no-audit --no-fund --loglevel=error || npm install --omit=dev --no-audit --no-fund --loglevel=error)) && cp dist/package.json dist/.installed; fi; node dist/server.js
-```
-
-What it does on every boot:
-
-1. **`git pull`** — picks up your latest push (dist/server.js + everything else)
-2. **Dependency check** — installs the 8 runtime packages into `dist/node_modules` only when missing or when `dist/package.json` changed (never installs the ~800-package frontend tree — no OOM)
-3. **`node dist/server.js`** — starts the backend
-
-Also set in the Startup tab:
+In the Wispbyte **Startup** tab:
 
 | Variable | Value |
 |---|---|
-| `AUTO_UPDATE` | `0` (our command handles pulling itself) |
+| Main file / `JS_FILE` | `dist/server.js` |
+| `AUTO_UPDATE` | `0` (build output is not in git) |
+
+If the panel allows a full custom startup command, this one is self-healing (installs deps if missing, fixes the package.json, then starts):
+
+```bash
+if [ ! -f dist/server.js ]; then echo "MISSING dist/server.js — run 'pnpm build:server' locally and upload dist/ + .env"; exit 1; fi; if [ ! -f package.json ] || grep -q '"next"' package.json; then [ -f dist/package.json ] && cp dist/package.json package.json || { echo "MISSING dist/package.json"; exit 1; }; fi; if [ ! -d node_modules/discord.js ]; then npm install --omit=dev --no-audit --no-fund --loglevel=error || npm install --omit=dev --no-audit --no-fund --loglevel=error; fi; node dist/server.js
+```
 
 ### 7.6 Start and verify
 
@@ -231,13 +224,6 @@ Successful boot log:
 ```
 
 The line `(bound to 0.0.0.0:9944)` must show **the panel's allocated port** — the backend reads the panel's port injection automatically.
-
-### 7.7 Optional: fully automatic restart on push
-
-Without this, pushing updates Vercel instantly but the backend picks changes up on its next restart (click Restart in the panel). To make pushes restart the backend too:
-
-1. In GitHub, create the workflow via the **web UI** (Settings → Actions → New workflow, or commit `.github/workflows/restart-backend.yml` through github.com — pushing workflow files from your PC needs a PAT with the `workflow` scope). Copy the content from **`.github/restart-backend.yml.example`** in the repo.
-2. Follow the comments in that file: add `PANEL_API_URL` / `PANEL_API_KEY` / `PANEL_SERVER_ID` as GitHub **secrets** and `PANEL_AUTO_RESTART=true` as a repo **variable**.
 
 ---
 
@@ -307,20 +293,11 @@ Example: `"destination": "http://78.154.103.48:9836/api/$1"`. Commit and push.
 
 ## 10. Updating the bot later
 
-The whole flow is git-driven — one push updates everything:
+1. On your machine: make your changes, then `pnpm build:server`.
+2. Re-upload `dist/server.js` (and `dist/package.json` if dependencies changed) to the container, overwriting.
+3. Restart the Wispbyte server.
 
-```bash
-# on your machine
-pnpm build:server          # refresh dist/server.js + dist/package.json (bot changes)
-git add -A
-git commit -m "update"
-git push
-```
-
-- **Vercel** redeploys the frontend automatically
-- **Wispbyte** picks it up on its next restart (startup command pulls) — click Restart in the panel, or set up the auto-restart action from §7.7 for fully hands-free updates
-
-Frontend-only changes don't need `pnpm build:server` — just push.
+Frontend changes: push to the repo — Vercel auto-deploys.
 
 ---
 
@@ -329,8 +306,8 @@ Frontend-only changes don't need `pnpm build:server` — just push.
 | Symptom | Cause | Fix |
 |---|---|---|
 | Panel stops the server ~30s after boot / bot never logs in | Backend bound to wrong port (log shows `bound to 0.0.0.0:3001` instead of the allocated port) | Re-upload the current `dist/server.js` — it reads the panel's port automatically. Log must show `(bound to 0.0.0.0:<allocated port>)` |
-| `npm install` gets `Killed` | Container RAM too small for the install | The startup command installs only the 8 runtime deps into `dist/node_modules` — make sure you're using it (§7.5). Delete a partial `dist/node_modules` and retry. Last resort: more RAM |
-| `ERR_MODULE_NOT_FOUND: Cannot find package '...'` from `dist/server.js` | `dist/node_modules` missing/incomplete | The startup command installs it automatically — check its output; or run `(cd dist && npm install --omit=dev --no-audit --no-fund)` in the panel console |
+| `npm install` gets `Killed` | Container RAM too small for the install | Make sure the container's `package.json` is the **dist** one (8 deps). Delete a partial `node_modules` and retry. Last resort: more RAM |
+| `ERR_MODULE_NOT_FOUND: Cannot find package '...'` from `dist/server.js` | `node_modules` missing/incomplete | Run the install again in the panel console; delete partial `node_modules` first |
 | Website loads but API errors / no data | `vercel.json` rewrites wrong or backend down | Check the backend address in rewrites; verify backend is running; test `https://vercel-url/api/stats` directly |
 | Login loops / "unauthorized" | OAuth redirect mismatch | Portal redirect must **exactly** equal `https://YOUR-VERCEL-URL/api/auth/callback`, and backend `APP_URL` must equal the Vercel URL (no trailing slash, no IP address) |
 | Realtime not updating in dashboard / "socket disconnected" on controls | Polling transport flaps through the Vercel proxy (fixed: the dashboard forces websocket-only), or `/socket.io/(.*)` rewrite missing | Redeploy the current frontend (websocket transport is built in); add the socket.io rewrite in `vercel.json`. If the backend log shows "Socket handshake rejected for origin …", set `APP_URL` to the Vercel URL |
