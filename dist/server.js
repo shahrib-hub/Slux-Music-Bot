@@ -6293,9 +6293,14 @@ var optionalHost = z.string().trim().optional().transform((v) => v && v.length >
 var optionalUrl = z.string().trim().optional().transform((v) => v && v.length > 0 ? v?.replace(/\/+$/, "") : void 0);
 var schema = z.object({
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
-  /** Public URL of THIS backend (bot + API + socket). The Discord OAuth
-   *  redirect is `${APP_URL}/api/auth/callback`. */
-  APP_URL: z.string().url().default("http://localhost:3001"),
+  /** Public URL of THIS backend as browsers reach it. With the Vercel
+   *  proxy setup this is the VERCEL URL (vercel.json rewrites forward
+   *  /api/* here). The Discord OAuth redirect is `${APP_URL}/api/auth/callback`.
+   *  Trailing slashes are stripped. */
+  APP_URL: z.preprocess(
+    (v) => typeof v === "string" ? v.trim().replace(/\/+$/, "") : v,
+    z.string().url()
+  ).default("http://localhost:3001"),
   /** Bind address for the HTTP server (hosting platforms need 0.0.0.0). */
   HOST: z.string().default("0.0.0.0"),
   DISCORD_TOKEN: z.string().min(1, "DISCORD_TOKEN is required"),
@@ -11746,7 +11751,7 @@ try {
 } catch {
 }
 var env = getEnv();
-var port = parseInt(process.env.PORT ?? "3001", 10);
+var port = parseInt(process.env.PORT ?? process.env.SERVER_PORT ?? "3001", 10);
 function healthz(_req, res) {
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify({ ok: true, uptime: process.uptime() }));
@@ -12062,6 +12067,7 @@ async function main() {
   wireBotBus(bot);
   const loginWithRetry = async (attempt = 1) => {
     try {
+      console.log(`[slux] Discord login (attempt ${attempt})\u2026`);
       await bot.login();
       console.log("[slux] Discord gateway connected");
     } catch (err) {
@@ -12074,6 +12080,14 @@ async function main() {
     }
   };
   void loginWithRetry();
+  const loginWatchdog = setTimeout(() => {
+    if (!bot.client.isReady()) {
+      console.warn(
+        "[slux] Discord login still pending after 60s \u2014 check the container's outbound access to discord.com (port 443)"
+      );
+    }
+  }, 6e4);
+  loginWatchdog.unref?.();
   const shutdown = async () => {
     console.log("[slux] Shutting down...");
     io?.close();

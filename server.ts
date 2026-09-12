@@ -16,7 +16,9 @@ try {
 }
 
 const env = getEnv();
-const port = parseInt(process.env.PORT ?? "3001", 10);
+// Panels (Wispbyte/Pterodactyl) inject the allocated port as SERVER_PORT;
+// an explicit PORT wins, then the panel allocation, then 3001.
+const port = parseInt(process.env.PORT ?? process.env.SERVER_PORT ?? "3001", 10);
 
 /**
  * Backend entry: Discord bot + HTTP API + socket.io.
@@ -393,6 +395,7 @@ async function main() {
   wireBotBus(bot);
   const loginWithRetry = async (attempt = 1): Promise<void> => {
     try {
+      console.log(`[slux] Discord login (attempt ${attempt})…`);
       await bot.login();
       console.log("[slux] Discord gateway connected");
     } catch (err) {
@@ -405,6 +408,15 @@ async function main() {
     }
   };
   void loginWithRetry();
+  // Visibility when login stalls (e.g. blocked outbound to discord.com)
+  const loginWatchdog = setTimeout(() => {
+    if (!bot.client.isReady()) {
+      console.warn(
+        "[slux] Discord login still pending after 60s — check the container's outbound access to discord.com (port 443)",
+      );
+    }
+  }, 60_000);
+  loginWatchdog.unref?.();
 
   const shutdown = async () => {
     console.log("[slux] Shutting down...");

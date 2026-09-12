@@ -31,9 +31,16 @@ const optionalUrl = z
 const schema = z
   .object({
     NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
-    /** Public URL of THIS backend (bot + API + socket). The Discord OAuth
-     *  redirect is `${APP_URL}/api/auth/callback`. */
-    APP_URL: z.string().url().default("http://localhost:3001"),
+    /** Public URL of THIS backend as browsers reach it. With the Vercel
+     *  proxy setup this is the VERCEL URL (vercel.json rewrites forward
+     *  /api/* here). The Discord OAuth redirect is `${APP_URL}/api/auth/callback`.
+     *  Trailing slashes are stripped. */
+    APP_URL: z
+      .preprocess(
+        (v) => (typeof v === "string" ? v.trim().replace(/\/+$/, "") : v),
+        z.string().url(),
+      )
+      .default("http://localhost:3001"),
     /** Bind address for the HTTP server (hosting platforms need 0.0.0.0). */
     HOST: z.string().default("0.0.0.0"),
     DISCORD_TOKEN: z.string().min(1, "DISCORD_TOKEN is required"),
