@@ -11,27 +11,30 @@ A feature-rich, free-forever Discord music bot with a beautiful real-time web da
 - **6 languages**: English, हिन्दी, Español, Français, Deutsch, Português
 - **No premium tiers** — everything free
 
-## Architecture (split deployment)
+## Architecture (Vercel proxy split)
 
 ```
-┌─────────────────────────┐         ┌──────────────────────────┐
-│  BACKEND (any Node host)│         │  FRONTEND (Vercel)       │
-│  - Discord bot          │  HTTPS  │  - Next.js dashboard     │
-│  - REST API  /api/*     │◄───────►│  - marketing site        │
-│  - socket.io /socket.io │ cookies │  - NEXT_PUBLIC_API_URL   │
-│  - MongoDB              │         │    points at backend     │
-└─────────────────────────┘         └──────────────────────────┘
+┌────────────────────────────┐         ┌─────────────────────────────┐
+│  VERCEL (frontend + proxy) │  proxy  │  BACKEND (Wispbyte/any Node)│
+│  - Next.js dashboard       │ ──────► │  - Discord bot              │
+│  - vercel.json rewrites:   │  HTTP + │  - REST API  /api/*         │
+│      /api/*  ──────────────┼─WS────► │  - socket.io /socket.io/*  │
+│      /socket.io/* ─────────┘         │  - MongoDB                  │
+└────────────────────────────┘         └─────────────────────────────┘
+        browser talks ONLY to the Vercel HTTPS domain
 ```
 
-The backend (`server.ts` → `dist/server.js`) runs the bot, the REST API and the socket server. The frontend is a pure Next.js app deployed on Vercel; it talks to the backend via `NEXT_PUBLIC_API_URL` with cross-origin cookies. The dashboard is **optional**: `DASHBOARD_ENABLED=false` runs a pure bot with no web surface at all.
+`vercel.json` rewrites make Vercel a **reverse proxy**: every `/api/*` and `/socket.io/*` request (including websockets) is forwarded to the backend's address. Everything is same-origin from the browser's perspective — no cross-origin cookies, no CORS pain, and the backend doesn't even need HTTPS (Vercel ↔ backend is server-to-server over plain HTTP; the browser always sees Vercel's HTTPS).
+
+The backend (`server.ts` → `dist/server.js`) runs the bot, the REST API and the socket server. The dashboard is **optional**: `DASHBOARD_ENABLED=false` runs a pure bot with no web surface at all.
 
 | Layer | Tech |
 |---|---|
 | Bot + API | discord.js v14 + Shoukaku 4 + raw Node HTTP + socket.io |
 | Audio | 3rd-party Lavalink v4 nodes (LavaSrc, LavaSearch, LavaLyrics plugins) |
-| Dashboard | Next.js 15 (App Router) on Vercel |
+| Dashboard | Next.js 15 (App Router) on Vercel + vercel.json rewrites |
 | Database | MongoDB (Atlas) + Mongoose |
-| Auth | Discord OAuth2 on the backend → JWT (jose) httpOnly cookie |
+| Auth | Discord OAuth2 on the backend → JWT (jose) httpOnly cookie (same-origin via proxy) |
 
 ## Development
 
@@ -79,56 +82,53 @@ LAVALINK_BACKUP_NAME=backup
 
 Use `/nodes` in Discord to see live status of all configured nodes.
 
-## Deployment
+## Deployment (Wispbyte backend + Vercel frontend)
 
-### 1. Backend (bot + API) — any Node 20+ host
+### 1. Backend on Wispbyte (or any Node 20+ host)
 
-Railway / Render / Fly.io / VPS / panel — anything that runs Node:
+Panels that run `node /home/container/${JS_FILE}` can't run TypeScript — build locally, upload the bundle:
 
-```bash
-pnpm install
-pnpm build:server     # → dist/server.js
-node dist/server.js   # start (binds HOST:PORT, defaults 0.0.0.0:3001)
-```
+1. On your machine:
+   ```powershell
+   pnpm install
+   pnpm build:server     # → dist/server.js
+   ```
+2. Upload `dist/` (plus `package.json`, and your `.env`) to the container; set `JS_FILE=dist/server.js`, `AUTO_UPDATE=0`, `NODE_ENV=production`, `HOST=0.0.0.0`, `PORT=<allocated port>`, and use a Node 20+ image.
+3. Let the panel's `npm install` finish (retry if OOM-killed; delete a partially killed `node_modules` and retry — the runtime needs only the production dependencies).
+4. Backend env (see `.env.example`): `DISCORD_TOKEN`, `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET`, `SESSION_SECRET`, `MONGODB_URI` (Atlas), `LAVALINK_*`, and:
+   - `APP_URL=https://<your-vercel-url>` — the **public** URL browsers use (Vercel proxies to the backend)
+   - `DASHBOARD_ENABLED=false` — optional: run a pure bot; no API/socket/dashboard links, OAuth secrets unnecessary
 
-Environment (see `.env.example`): `DISCORD_TOKEN`, `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET`, `SESSION_SECRET`, `MONGODB_URI` (Atlas), `LAVALINK_*`, plus:
+The container's `IP:PORT` allocation is what Vercel will proxy to.
 
-- `APP_URL` — the backend's **public** URL (e.g. `https://slux-bot.up.railway.app`)
-- `DASHBOARD_URL` — your Vercel URL (e.g. `https://slux.vercel.app`) — used for CORS, bot embed links and the post-login redirect
-- `DASHBOARD_ENABLED=false` — **optional**: run a pure bot. No API, no socket server, no dashboard links in embeds, and `DISCORD_CLIENT_SECRET`/`SESSION_SECRET` become unnecessary.
+### 2. Frontend on Vercel
 
-The backend exposes `/healthz` for uptime probes.
-
-### 2. Frontend (dashboard) — Vercel
-
-1. Import the repo as a Vercel project (Next.js is auto-detected; `pnpm build` runs `next build`).
-2. Set the environment variables in Vercel → Settings → Environment Variables:
-   - `NEXT_PUBLIC_API_URL` — your backend URL (e.g. `https://slux-bot.up.railway.app`)
-   - `NEXT_PUBLIC_DISCORD_CLIENT_ID` — your Discord application id (for invite links)
-3. Deploy. No secrets live on Vercel — only public values.
+1. Import the repo as a Vercel project — **Root Directory `./`** (repo root), Next.js auto-detected, `pnpm build` runs automatically.
+2. **Edit `vercel.json`** in the repo: replace `YOUR-WISPBYTE-ADDRESS:PORT` in both rewrites with your backend's public address (e.g. `http://212.227.166.131:10857`):
+   ```json
+   {
+     "rewrites": [
+       { "source": "/api/(.*)", "destination": "http://YOUR-BACKEND/api/$1" },
+       { "source": "/socket.io/(.*)", "destination": "http://YOUR-BACKEND/socket.io/$1" }
+     ]
+   }
+   ```
+3. Vercel env vars: `NEXT_PUBLIC_DISCORD_CLIENT_ID` only. **Leave `NEXT_PUBLIC_API_URL` unset** — the rewrites keep everything same-origin.
+4. Deploy → note the URL (e.g. `https://slux.vercel.app`), then set it as `APP_URL` on the backend (redeploy/restart the backend after).
 
 ### 3. Discord OAuth setup
 
-On the Developer Portal → OAuth2, the redirect URI must be the **backend's** callback:
+On the Developer Portal → OAuth2, add the redirect:
 
 ```
-https://<backend-url>/api/auth/callback
+https://<your-vercel-url>/api/auth/callback
 ```
 
-(e.g. `https://slux-bot.up.railway.app/api/auth/callback`)
+Login flow: Login button → same-origin `/api/auth/login` → Vercel proxies to backend → Discord → callback proxied back → session cookie set (same-origin Lax cookie) → redirect to `/dashboard`.
 
-Login flow: user clicks Login on the dashboard → backend `/api/auth/login` → Discord → backend `/api/auth/callback` sets the session cookie on the backend domain → redirect to `DASHBOARD_URL/dashboard`. The dashboard then authenticates every API/socket call with that cookie (cross-origin cookies use `SameSite=None; Secure` in production).
+### Alternative: single host (no Vercel)
 
-### Panel-style hosting (Pterodactyl, `node JS_FILE` startup)
-
-Panels that run `node /home/container/${JS_FILE}` can't run TypeScript — build first, then upload:
-
-1. Locally: `pnpm install` then `pnpm build:server` → produces `dist/server.js`.
-2. Upload `dist/` (plus `.env`, `package.json`) to the container; set `JS_FILE=dist/server.js`, `AUTO_UPDATE=0`, `NODE_ENV=production`, `HOST=0.0.0.0`, `PORT=<allocated>`, and use a Node 20+ image.
-3. Let the panel's `npm install` finish (retry if OOM-killed; a partially killed `node_modules` should be deleted and retried).
-4. The frontend still runs on Vercel — set its `NEXT_PUBLIC_API_URL` to the panel's public URL.
-
-Note: panels usually don't provide public HTTPS URLs — the dashboard needs `NEXT_PUBLIC_API_URL` to be reachable from browsers and to allow the OAuth redirect, so a host with a public HTTPS domain (Railway/Render/VPS) is the smoother choice.
+Any Node host can also run everything together (Railway/Render/VPS): `pnpm build:all`, `node dist/server.js`, `APP_URL=<that host's URL>`. Non-API requests then redirect to `DASHBOARD_URL` — or serve your own frontend build there. For direct frontend-on-another-domain setups, set `NEXT_PUBLIC_API_URL` (cross-origin cookies then require `SameSite=None`, which this build no longer emits — prefer the proxy pattern).
 
 ## Discord Application Setup
 
@@ -157,14 +157,16 @@ Try: `!play <song>`, `!search <query>` (button picker), `!lyrics`, `!bassboost i
 ## Troubleshooting
 
 - **Bot never connects to Lavalink**: verify host/port/password with your provider, and that `LAVALINK_SECURE=true` is set for TLS nodes. Run `/nodes` to see live node status.
-- **Dashboard can't reach the API**: check `NEXT_PUBLIC_API_URL` on Vercel (no trailing slash), that the backend URL is public HTTPS, and `DASHBOARD_URL` on the backend matches the Vercel URL exactly (CORS is strict).
-- **Login loops / "unauthorized"**: the OAuth redirect on the portal must exactly equal `https://<backend-url>/api/auth/callback`; cross-origin cookies require HTTPS on both ends.
+- **Dashboard shows errors / no data**: check the `vercel.json` rewrites point at the right backend address (test `https://<vercel-url>/api/stats` in your browser — should return JSON), and that the backend is running (`/healthz` on its direct address).
+- **Login loops / "unauthorized"**: the OAuth redirect on the portal must exactly equal `https://<vercel-url>/api/auth/callback`, and the backend's `APP_URL` must equal the Vercel URL.
+- **Realtime not updating**: websockets proxied through Vercel rewrites need the `/socket.io/(.*)` rewrite present; check the browser console for connection errors.
 - **YouTube "Sign in to confirm you're not a bot"**: the node's provider may be rate-limited — ask your provider or switch nodes. Other sources are unaffected.
 
 ## Project Structure
 
 ```
 server.ts                 # backend entry: HTTP + API + socket.io + bot
+vercel.json               # Vercel rewrites: /api/* + /socket.io/* → backend
 scripts/dev.mjs           # dev runner: backend watch (:3001) + next dev (:3000)
 src/
 ├─ app/                   # Next.js App Router (marketing + dashboard pages, Vercel)
@@ -184,10 +186,9 @@ tests/                    # vitest: i18n parity, filters, queue logic, parsing, 
 
 ## Architecture Notes
 
-- **Split deployment**: the backend serves only `/api/*`, `/socket.io` and `/healthz`; everything else redirects to `DASHBOARD_URL`. The frontend is static-ish Next.js on Vercel with no secrets.
+- **Vercel proxy split**: `vercel.json` rewrites forward `/api/*` and `/socket.io/*` (websockets included) to the backend, so the browser only ever talks to the Vercel HTTPS domain — same-origin cookies and sockets, no CORS complexity, backend can be plain HTTP.
 - **Optional dashboard**: `DASHBOARD_ENABLED=false` disables the API + socket server entirely and removes dashboard links from bot embeds; OAuth secrets are not validated in that mode.
 - **Node failover**: Shoukaku load-balances across the main + backup nodes by penalties and moves active players on disconnect; all raw REST calls (lyrics, loadsearch) follow the current ideal node.
 - **Real-time**: every player state change emits a snapshot on the bot event bus → socket.io room `guild:{guildId}` → dashboard. Socket connections are authenticated with the JWT session cookie and authorized against guild membership/DJ rules.
-- **Cross-origin auth**: session cookie lives on the backend domain (`SameSite=None; Secure` in production, `Lax` in dev) and is sent with credentialed fetches/socket connections from the Vercel origin; CORS only allows `DASHBOARD_URL` and the dev origins.
 - **Resilience**: MongoDB and Discord gateway connect with background retry; Lavalink sessions resume after restarts.
 - **i18n**: all bot responses and dashboard strings come from `src/i18n/locales/*.json`; a Vitest test enforces key parity across the 6 locales.

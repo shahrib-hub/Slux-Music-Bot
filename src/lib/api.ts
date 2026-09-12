@@ -1,11 +1,15 @@
 "use client";
 
 /**
- * Client-side API helpers for the split deployment.
+ * Client-side API helpers.
  *
- * The dashboard frontend runs on Vercel while the bot/API runs elsewhere.
- * Set NEXT_PUBLIC_API_URL to the backend URL (e.g. https://bot.example.com);
- * when empty (local same-origin setups) paths stay relative.
+ * Default (empty NEXT_PUBLIC_API_URL): SAME-ORIGIN paths — the dashboard is
+ * deployed on Vercel and `vercel.json` rewrites proxy /api/* and /socket.io/*
+ * to the backend (Wispbyte/any host). All requests stay same-origin, so
+ * cookies and websockets just work.
+ *
+ * Set NEXT_PUBLIC_API_URL only for direct-connection setups (local dev does
+ * this automatically with http://localhost:3001).
  */
 
 export const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? "").replace(/\/+$/, "");

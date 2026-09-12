@@ -90,20 +90,20 @@ function parseCookies(req: IncomingMessage): Record<string, string> {
   return out;
 }
 
-/** Session cookie attributes. Cross-origin (Vercel ↔ backend) in production
- *  requires SameSite=None; Secure so the browser sends it on cross-site
- *  requests. In dev localhost:3000 ↔ localhost:3001 are same-site → Lax. */
+/** Session cookie attributes. With the Vercel-rewrite proxy pattern all
+ *  browser requests arrive same-origin (Vercel forwards them), so Lax
+ *  cookies work everywhere: dev (localhost:3000 ↔ :3001 share the cookie
+ *  jar — cookies ignore ports) and production (vercel.app domain). */
 function sessionCookie(env: Env, name: string, value: string, maxAge: number): string {
   const attrs = [
     `${name}=${encodeURIComponent(value)}`,
     "Path=/",
     "HttpOnly",
     `Max-Age=${maxAge}`,
+    "SameSite=Lax",
   ];
   if (env.NODE_ENV === "production") {
-    attrs.push("Secure", "SameSite=None");
-  } else {
-    attrs.push("SameSite=Lax");
+    attrs.push("Secure");
   }
   return attrs.join("; ");
 }
@@ -130,13 +130,16 @@ async function requireSession(
   return session;
 }
 
-/** Allowed browser origins for CORS (the dashboard frontend). */
+/** Allowed browser origins for CORS. With the Vercel-rewrite proxy, requests
+ *  arrive same-origin (no CORS involved); this list covers the proxy origin
+ *  (APP_URL/DASHBOARD_URL = the Vercel URL) and local dev. */
 function allowedOrigins(env: Env): string[] {
-  const origins: string[] = [];
-  if (env.DASHBOARD_URL) origins.push(env.DASHBOARD_URL);
-  // Local dev: Next dev server on :3000 talking to the backend on :3001
-  origins.push("http://localhost:3000", "http://127.0.0.1:3000");
-  return origins;
+  const origins = new Set<string>();
+  if (env.DASHBOARD_URL) origins.add(env.DASHBOARD_URL);
+  if (env.APP_URL) origins.add(env.APP_URL);
+  origins.add("http://localhost:3000");
+  origins.add("http://127.0.0.1:3000");
+  return [...origins];
 }
 
 function corsHeaders(req: IncomingMessage, env: Env): Record<string, string> {

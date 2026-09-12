@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "http://YOUR-WISPBYTE-ADDRESS:PORT/api/$1"
+    },
+    {
+      "source": "/socket.io/(.*)",
+      "destination": "http://YOUR-WISPBYTE-ADDRESS:PORT/socket.io/$1"
+    }
+  ]
+}

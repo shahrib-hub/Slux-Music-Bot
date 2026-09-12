@@ -88,14 +88,22 @@ async function main() {
   let dashboard: ReturnType<SocketIOServer["of"]> | null = null;
 
   if (dashboardEnabled) {
-    const allowedOrigins = [
-      ...(env.DASHBOARD_URL ? [env.DASHBOARD_URL] : []),
-      "http://localhost:3000",
-      "http://127.0.0.1:3000",
+    // With the Vercel-rewrite proxy, socket connections arrive same-origin;
+    // the allowlist covers the proxy origin (APP_URL/DASHBOARD_URL = the
+    // Vercel URL) and local dev.
+    const socketOrigins = [
+      ...new Set(
+        [
+          env.DASHBOARD_URL,
+          env.APP_URL,
+          "http://localhost:3000",
+          "http://127.0.0.1:3000",
+        ].filter((o): o is string => Boolean(o)),
+      ),
     ];
     io = new SocketIOServer(httpServer, {
       path: "/socket.io",
-      cors: { origin: allowedOrigins, credentials: true },
+      cors: { origin: socketOrigins, credentials: true },
     });
     dashboard = io.of("/dashboard");
 
