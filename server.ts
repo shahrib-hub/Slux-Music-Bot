@@ -1,6 +1,5 @@
-import { createServer } from "node:http";
+import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { Server as SocketIOServer, type Socket } from "socket.io";
-import next from "next";
 import { BotService } from "@/bot/bot";
 import { setBot, getBot } from "@/lib/bot-singleton";
 import { connectDatabase, disconnectDatabase } from "@/db/connect";
@@ -8,6 +7,7 @@ import { getEnv } from "@/lib/env";
 import { verifySessionToken } from "@/lib/jwt";
 import { getGuildSettings } from "@/db/repositories/guilds";
 import { emptyPlayerSnapshot } from "@/bot/music/types";
+import { createApiHandler } from "@/server/api";
 
 try {
   process.loadEnvFile();
@@ -16,95 +16,153 @@ try {
 }
 
 const env = getEnv();
-const dev = env.NODE_ENV !== "production";
-const port = parseInt(process.env.PORT ?? "3000", 10);
+const port = parseInt(process.env.PORT ?? "3001", 10);
+
+/**
+ * Backend entry: Discord bot + HTTP API + socket.io.
+ *
+ * The dashboard frontend (Next.js) is deployed separately (e.g. Vercel) and
+ * talks to this server via NEXT_PUBLIC_API_URL. Non-API requests are
+ * redirected to the dashboard site (DASHBOARD_URL).
+ *
+ * Set DASHBOARD_ENABLED=false to run a pure bot with no web surface at all.
+ */
+
+function healthz(_req: IncomingMessage, res: ServerResponse): void {
+  res.writeHead(200, { "Content-Type": "application/json" });
+  res.end(JSON.stringify({ ok: true, uptime: process.uptime() }));
+}
+
+function redirectToFrontend(req: IncomingMessage, res: ServerResponse): void {
+  if (env.DASHBOARD_URL) {
+    res.writeHead(302, { Location: env.DASHBOARD_URL + (req.url ?? "/") });
+    res.end();
+    return;
+  }
+  res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
+  res.end(
+    "Slux backend is running.\n" +
+      "The dashboard is deployed separately — set DASHBOARD_URL so this server can redirect to it.\n",
+  );
+}
 
 async function main() {
-  console.log("[slux] Booting...");
+  console.log("[slux] Booting backend...");
 
-  const app = next({ dev });
-  const handle = app.getRequestHandler();
-  await app.prepare();
+  const dashboardEnabled = env.DASHBOARD_ENABLED;
+  if (!dashboardEnabled) {
+    console.log("[slux] Dashboard DISABLED (DASHBOARD_ENABLED=false) — bot-only mode");
+  }
+
+  const apiHandler = createApiHandler();
 
   const httpServer = createServer((req, res) => {
-    // Socket.io attaches its own request listener for the /socket.io path and
-    // owns those responses. Dispatching them to Next as well makes Next's
-    // render worker write onto an already-responded socket, which floods the
-    // console with "Unexpected response from worker: undefined" on every poll.
-    if (req.url?.startsWith("/socket.io")) return;
-    void handle(req, res);
-  });
-
-  const io = new SocketIOServer(httpServer, {
-    path: "/socket.io",
-    cors: { origin: env.APP_URL, credentials: true },
-  });
-
-  const dashboard = io.of("/dashboard");
-
-  dashboard.use(async (socket, next) => {
-    const cookie = socket.handshake.headers.cookie ?? "";
-    const token = /slux_session=([^;]+)/.exec(cookie)?.[1];
-    if (!token) return next(new Error("unauthorized"));
     try {
-      const session = await verifySessionToken(decodeURIComponent(token));
-      (socket.data as { userId?: string }).userId = session.userId;
-      next();
-    } catch {
-      next(new Error("unauthorized"));
+      // Health probe for hosting platforms
+      if (req.url === "/healthz") return healthz(req, res);
+      // Socket.io owns /socket.io requests
+      if (req.url?.startsWith("/socket.io")) return;
+      if (dashboardEnabled && req.url?.startsWith("/api")) {
+        void apiHandler(req, res);
+        return;
+      }
+      if (!dashboardEnabled && req.url?.startsWith("/api")) {
+        res.writeHead(503, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "dashboard disabled" }));
+        return;
+      }
+      // Everything else belongs to the frontend site
+      redirectToFrontend(req, res);
+    } catch (err) {
+      console.error("[slux] HTTP handler error:", err);
+      if (!res.headersSent) {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "internal error" }));
+      }
     }
   });
 
-  dashboard.on("connection", (socket: Socket) => {
-    const userId = (socket.data as { userId?: string }).userId;
+  // ── Dashboard realtime (socket.io) — only when the dashboard is enabled ──
 
-    socket.on("guild:join", (guildId: unknown) => {
+  let io: SocketIOServer | null = null;
+  let dashboard: ReturnType<SocketIOServer["of"]> | null = null;
+
+  if (dashboardEnabled) {
+    const allowedOrigins = [
+      ...(env.DASHBOARD_URL ? [env.DASHBOARD_URL] : []),
+      "http://localhost:3000",
+      "http://127.0.0.1:3000",
+    ];
+    io = new SocketIOServer(httpServer, {
+      path: "/socket.io",
+      cors: { origin: allowedOrigins, credentials: true },
+    });
+    dashboard = io.of("/dashboard");
+
+    dashboard.use(async (socket, next) => {
+      const cookie = socket.handshake.headers.cookie ?? "";
+      const token = /slux_session=([^;]+)/.exec(cookie)?.[1];
+      if (!token) return next(new Error("unauthorized"));
       try {
-        if (typeof guildId !== "string") return;
-        socket.data.guildId = guildId;
-        void socket.join(`guild:${guildId}`);
-        const botNow = getBot();
-        const player = botNow?.music.getPlayer(guildId);
-        if (player) {
-          socket.emit("player:snapshot", player.snapshot());
-        } else {
-          const guild = botNow?.client.guilds.cache.get(guildId);
-          socket.emit("player:snapshot", emptyPlayerSnapshot(guildId, guild?.name ?? ""));
+        const session = await verifySessionToken(decodeURIComponent(token));
+        (socket.data as { userId?: string }).userId = session.userId;
+        next();
+      } catch {
+        next(new Error("unauthorized"));
+      }
+    });
+
+    dashboard.on("connection", (socket: Socket) => {
+      const userId = (socket.data as { userId?: string }).userId;
+
+      socket.on("guild:join", (guildId: unknown) => {
+        try {
+          if (typeof guildId !== "string") return;
+          socket.data.guildId = guildId;
+          void socket.join(`guild:${guildId}`);
+          const botNow = getBot();
+          const player = botNow?.music.getPlayer(guildId);
+          if (player) {
+            socket.emit("player:snapshot", player.snapshot());
+          } else {
+            const guild = botNow?.client.guilds.cache.get(guildId);
+            socket.emit("player:snapshot", emptyPlayerSnapshot(guildId, guild?.name ?? ""));
+          }
+        } catch (err) {
+          console.error("[slux] socket guild:join error:", err);
         }
-      } catch (err) {
-        console.error("[slux] socket guild:join error:", err);
-      }
-    });
+      });
 
-    socket.on("guild:leave", (guildId: unknown) => {
-      try {
-        if (typeof guildId !== "string") return;
-        void socket.leave(`guild:${guildId}`);
-      } catch (err) {
-        console.error("[slux] socket guild:leave error:", err);
-      }
-    });
+      socket.on("guild:leave", (guildId: unknown) => {
+        try {
+          if (typeof guildId !== "string") return;
+          void socket.leave(`guild:${guildId}`);
+        } catch (err) {
+          console.error("[slux] socket guild:leave error:", err);
+        }
+      });
 
-    socket.on("player:action", (payload: unknown, ack?: (result: unknown) => void) => {
-      handlePlayerAction(userId, payload)
-        .then((result) => ack?.(result))
-        .catch((err) => {
-          console.error("[slux] socket player:action error:", err);
-          ack?.({ ok: false, error: "internal error" });
-        });
-    });
+      socket.on("player:action", (payload: unknown, ack?: (result: unknown) => void) => {
+        handlePlayerAction(userId, payload)
+          .then((result) => ack?.(result))
+          .catch((err) => {
+            console.error("[slux] socket player:action error:", err);
+            ack?.({ ok: false, error: "internal error" });
+          });
+      });
 
-    socket.on("error", (err) => {
-      console.error("[slux] socket error:", err?.message ?? String(err));
+      socket.on("error", (err) => {
+        console.error("[slux] socket error:", err?.message ?? String(err));
+      });
     });
-  });
+  }
 
-  const wireBotBus = () => {
+  const wireBotBus = (bot: BotService) => {
     bot.bus.on("snapshot", (snapshot) => {
-      dashboard.to(`guild:${snapshot.guildId}`).emit("player:snapshot", snapshot);
+      dashboard?.to(`guild:${snapshot.guildId}`).emit("player:snapshot", snapshot);
     });
     bot.bus.on("playerDestroy", ({ guildId }) => {
-      dashboard.to(`guild:${guildId}`).emit("player:snapshot", emptyPlayerSnapshot(guildId));
+      dashboard?.to(`guild:${guildId}`).emit("player:snapshot", emptyPlayerSnapshot(guildId));
     });
   };
 
@@ -296,7 +354,12 @@ async function main() {
   }
 
   httpServer.listen(port, env.HOST, () => {
-    console.log(`[slux] ${dev ? "Dev" : "Production"} server ready on ${env.APP_URL} (bound to ${env.HOST}:${port})`);
+    console.log(
+      `[slux] Backend ready on ${env.APP_URL} (bound to ${env.HOST}:${port}) — ` +
+        (dashboardEnabled
+          ? `dashboard at ${env.DASHBOARD_URL ?? "(set DASHBOARD_URL)"}`
+          : "dashboard disabled"),
+    );
   });
 
   // Connect the database after the HTTP server is up; retry forever in the
@@ -319,7 +382,7 @@ async function main() {
   // the Discord client is ready — no provisioning step is needed.
   const bot = getBot() ?? new BotService();
   setBot(bot);
-  wireBotBus();
+  wireBotBus(bot);
   const loginWithRetry = async (attempt = 1): Promise<void> => {
     try {
       await bot.login();
@@ -337,7 +400,7 @@ async function main() {
 
   const shutdown = async () => {
     console.log("[slux] Shutting down...");
-    io.close();
+    io?.close();
     await bot.shutdown().catch(() => {});
     await disconnectDatabase().catch(() => {});
     httpServer.close(() => process.exit(0));

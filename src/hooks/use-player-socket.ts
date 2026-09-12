@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { io, type Socket } from "socket.io-client";
 import type { PlayerSnapshot } from "@/bot/music/types";
+import { socketOptions, socketUrl } from "@/lib/api";
 
 export type PlayerAction =
   | { action: "join"; value: string }
@@ -34,15 +35,7 @@ export function usePlayerSocket(guildId: string) {
   const pendingRef = useRef(false);
 
   useEffect(() => {
-    const socket = io("/dashboard", {
-      path: "/socket.io",
-      withCredentials: true,
-      // Bounded reconnects: a refused/failed handshake must not become an
-      // infinite reconnect storm flooding the browser console.
-      reconnectionAttempts: 8,
-      reconnectionDelay: 1000,
-      reconnectionDelayMax: 10000,
-    });
+    const socket = io(socketUrl() + "/dashboard", socketOptions);
     socketRef.current = socket;
 
     socket.on("connect", () => {

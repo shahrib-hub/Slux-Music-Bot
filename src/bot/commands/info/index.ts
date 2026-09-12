@@ -1,8 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, type EmbedBuilder } from "discord.js";
 import type { BotCommand, CommandContext } from "@/bot/commands/types";
-import { baseEmbed, errorEmbed, EMOJI } from "@/bot/lib/embeds";
+import { baseEmbed, dashboardBase, errorEmbed, EMOJI } from "@/bot/lib/embeds";
 import { formatDurationLong, formatNumber } from "@/lib/utils";
-import { getEnv } from "@/lib/env";
 import { buildHelpOverview, inviteUrl } from "@/bot/lib/helpview";
 
 export const helpCommand: BotCommand = {
@@ -94,7 +93,7 @@ export const developerCommand: BotCommand = {
   category: "info",
   aliases: ["dev", "shm", "credits"],
   async execute(ctx: CommandContext) {
-    const env = getEnv();
+    const dashboard = dashboardBase();
     const embed = baseEmbed()
       .setAuthor({ name: `💖 ${ctx.t("info.developerTitle")}` })
       .setDescription(ctx.t("info.developerDescription"))
@@ -124,12 +123,16 @@ export const developerCommand: BotCommand = {
         .setEmoji("💬")
         .setStyle(ButtonStyle.Link)
         .setURL("https://discord.gg/NC4YdDQj5u"),
-      new ButtonBuilder()
-        .setLabel(ctx.t("info.dashboardButton"))
-        .setEmoji("🖥️")
-        .setStyle(ButtonStyle.Link)
-        .setURL(env.APP_URL),
     );
+    if (dashboard) {
+      row.addComponents(
+        new ButtonBuilder()
+          .setLabel(ctx.t("info.dashboardButton"))
+          .setEmoji("🖥️")
+          .setStyle(ButtonStyle.Link)
+          .setURL(dashboard),
+      );
+    }
 
     await ctx.reply({ embeds: [embed], components: [row] });
   },

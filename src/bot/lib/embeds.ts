@@ -4,6 +4,7 @@ import type { MusicManager } from "@/bot/music/MusicManager";
 import type { GuildPlayer } from "@/bot/music/GuildPlayer";
 import type { ResolvedTrack } from "@/bot/music/types";
 import { formatDuration } from "@/lib/utils";
+import { getEnv } from "@/lib/env";
 import type { Locale, Translator } from "@/i18n";
 
 declare module "discord.js" {
@@ -303,6 +304,14 @@ export function localeChoices(): { name: string; value: string }[] {
     { name: "🇩🇪 Deutsch", value: "de" },
     { name: "🇧🇷 Português", value: "pt" },
   ];
+}
+
+/** Base URL of the dashboard frontend, or null when the dashboard is
+ *  disabled (DASHBOARD_ENABLED=false) — embeds then omit dashboard links. */
+export function dashboardBase(): string | null {
+  const env = getEnv();
+  if (!env.DASHBOARD_ENABLED) return null;
+  return env.DASHBOARD_URL ?? env.APP_URL;
 }
 
 export function localeLabel(locale: Locale): string {

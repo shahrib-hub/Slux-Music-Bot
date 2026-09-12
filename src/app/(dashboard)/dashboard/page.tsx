@@ -9,7 +9,15 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useI18n } from "@/components/i18n-provider";
 import { SessionExpiredCard } from "@/components/session-expired-card";
-import type { DashboardGuild } from "@/app/api/guilds/route";
+import { apiFetch } from "@/lib/api";
+
+interface DashboardGuild {
+  id: string;
+  name: string;
+  icon: string | null;
+  memberCount: number | null;
+  botPresent: boolean;
+}
 
 type LoadState = "loading" | "ready" | "expired" | "error";
 
@@ -21,7 +29,7 @@ export default function DashboardHome() {
 
   const load = useCallback(() => {
     setState("loading");
-    fetch("/api/guilds")
+    apiFetch("/api/guilds")
       .then(async (r) => {
         if (r.status === 401) {
           setState("expired");

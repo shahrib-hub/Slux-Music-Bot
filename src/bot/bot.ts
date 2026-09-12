@@ -37,7 +37,7 @@ import { getEnv } from "@/lib/env";
 import { lavalinkNodeOptions } from "@/lib/lavalink";
 import { tokenize } from "@/bot/lib/parse";
 import { isDJ, canControl, botChannelAllowed, manageGuild } from "@/bot/lib/permissions";
-import { errorEmbed, BRAND_COLOR, baseEmbed } from "@/bot/lib/embeds";
+import { errorEmbed, BRAND_COLOR, baseEmbed, dashboardBase } from "@/bot/lib/embeds";
 import { GuildModel } from "@/db/models/Guild";
 import { buildQueueMessage } from "@/bot/lib/queueview";
 import {
@@ -208,48 +208,57 @@ export class BotService {
       const settings = await getGuildSettings(guild.id);
       if (settings.welcomed) return;
 
-      const env = getEnv();
+      const dashboard = dashboardBase();
+      const fields: { name: string; value: string; inline: boolean }[] = [
+        { name: "⌨️ Prefix", value: `\`${settings.prefix}\` — change it anytime with \`/prefix\``, inline: true },
+        { name: "✨ Slash commands", value: "Type `/` and pick any command", inline: true },
+      ];
+      if (dashboard) {
+        fields.push({
+          name: "🖥️ Web dashboard",
+          value: `[Open the dashboard](${dashboard}/dashboard) — control everything from your browser`,
+          inline: false,
+        });
+        fields.push({
+          name: "📜 All commands",
+          value: `[Browse the full command list](${dashboard}/commands)`,
+          inline: false,
+        });
+      }
+      fields.push({
+        name: "💡 Tip",
+        value: "Mention me (`@Slux`) anytime to see this server's prefix and popular commands!",
+        inline: false,
+      });
+
       const embed = baseEmbed()
         .setAuthor({ name: "🎉 Thanks for adding Slux!" })
         .setDescription(
           `Hey **${guild.name}** — I'm Slux, your new music bot! I'm online and ready to play.` +
             `\n\nTo get started, type **\`/play\`** or **\`${settings.prefix}play <song>\`** while in a voice channel.`,
         )
-        .addFields(
-          { name: "⌨️ Prefix", value: `\`${settings.prefix}\` — change it anytime with \`/prefix\``, inline: true },
-          { name: "✨ Slash commands", value: "Type `/` and pick any command", inline: true },
-          {
-            name: "🖥️ Web dashboard",
-            value: `[Open the dashboard](${env.APP_URL}/dashboard) — control everything from your browser`,
-            inline: false,
-          },
-          {
-            name: "📜 All commands",
-            value: `[Browse the full command list](${env.APP_URL}/commands)`,
-            inline: false,
-          },
-          {
-            name: "💡 Tip",
-            value: "Mention me (`@Slux`) anytime to see this server's prefix and popular commands!",
-            inline: false,
-          },
-        )
+        .addFields(fields)
         .setImage(
           "https://cdn.discordapp.com/attachments/922122006487515136/1547497081143562290/sluxwelcomemsg.png",
         )
         .setFooter({ text: "Made with ❤️ by SHM • YouTube: @Letzforge • Discord: shahrib" });
 
-      const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder()
-          .setLabel("Open Dashboard")
-          .setEmoji("🖥️")
-          .setStyle(ButtonStyle.Link)
-          .setURL(env.APP_URL),
-        new ButtonBuilder()
-          .setLabel("Commands")
-          .setEmoji("📜")
-          .setStyle(ButtonStyle.Link)
-          .setURL(`${env.APP_URL}/commands`),
+      const row = new ActionRowBuilder<ButtonBuilder>();
+      if (dashboard) {
+        row.addComponents(
+          new ButtonBuilder()
+            .setLabel("Open Dashboard")
+            .setEmoji("🖥️")
+            .setStyle(ButtonStyle.Link)
+            .setURL(dashboard),
+          new ButtonBuilder()
+            .setLabel("Commands")
+            .setEmoji("📜")
+            .setStyle(ButtonStyle.Link)
+            .setURL(`${dashboard}/commands`),
+        );
+      }
+      row.addComponents(
         new ButtonBuilder()
           .setLabel("YouTube")
           .setEmoji("▶️")

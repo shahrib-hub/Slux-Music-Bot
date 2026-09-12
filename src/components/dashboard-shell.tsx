@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
   LayoutDashboard,
@@ -19,6 +19,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useI18n } from "@/components/i18n-provider";
 import { LOCALES } from "@/i18n";
+import { apiFetch } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
 export function DashboardShell({
@@ -29,7 +30,6 @@ export function DashboardShell({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const router = useRouter();
   const { t, locale, setLocale } = useI18n();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -47,9 +47,8 @@ export function DashboardShell({
   ];
 
   async function logout() {
-    await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/");
-    router.refresh();
+    await apiFetch("/api/auth/logout", { method: "POST" }).catch(() => {});
+    window.location.href = "/";
   }
 
   return (

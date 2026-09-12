@@ -39,6 +39,7 @@ import { useI18n } from "@/components/i18n-provider";
 import { usePlayerSocket, useProgress } from "@/hooks/use-player-socket";
 import type { PlayerSnapshot, SearchResultEntry, LyricsResult } from "@/bot/music/types";
 import { cn, formatDuration } from "@/lib/utils";
+import { apiFetch } from "@/lib/api";
 
 interface GuildInfo {
   guild: { id: string; name: string; icon: string | null };
@@ -82,7 +83,7 @@ export default function PlayerPage() {
   const lyricsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetch(`/api/player/${guildId}`)
+    apiFetch(`/api/player/${guildId}`)
       .then(async (r) => {
         if (!r.ok) throw new Error(String(r.status));
         return r.json();
@@ -108,7 +109,7 @@ export default function PlayerPage() {
     setLyricsLoading(true);
     setLyrics(null);
     setLyricsKey(trackKey);
-    fetch(`/api/lyrics/${guildId}`, { signal: controller.signal })
+    apiFetch(`/api/lyrics/${guildId}`, { signal: controller.signal })
       .then(async (r) => {
         if (!r.ok) throw new Error(String(r.status));
         return (await r.json()) as { lyrics: LyricsResult | null };
@@ -141,7 +142,7 @@ export default function PlayerPage() {
     setSearching(true);
     setSearchResults(null);
     try {
-      const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+      const res = await apiFetch(`/api/search?q=${encodeURIComponent(q)}`);
       const data = (await res.json()) as { results: SearchResultEntry[] };
       setSearchResults(data.results);
     } catch {

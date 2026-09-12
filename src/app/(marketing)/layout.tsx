@@ -3,16 +3,17 @@ import { Youtube, MessageCircle } from "lucide-react";
 import { BrandLogo, EqualizerBars } from "@/components/brand";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { getEnv } from "@/lib/env";
-import { inviteUrl } from "@/lib/invite";
-
-export const dynamic = "force-dynamic";
+import { getWebEnv } from "@/lib/web-env";
+import { INVITE_PERMISSIONS } from "@/lib/invite";
 
 export const YOUTUBE_URL = "https://youtube.com/@Letzforge";
 export const DISCORD_SERVER_URL = "https://discord.gg/NC4YdDQj5u";
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
-  const invite = inviteUrl(getEnv().DISCORD_CLIENT_ID);
+  const web = getWebEnv();
+  const invite = web.clientId
+    ? `https://discord.com/oauth2/authorize?client_id=${web.clientId}&scope=bot+applications.commands&permissions=${INVITE_PERMISSIONS}`
+    : "/dashboard";
 
   return (
     <div className="relative min-h-screen overflow-x-clip">

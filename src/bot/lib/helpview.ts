@@ -8,7 +8,7 @@ import {
 import type { PaginationManager, ComponentInteraction, ComponentRow } from "@/bot/controller";
 import { commandCatalog } from "@/lib/command-catalog";
 import type { Translator } from "@/i18n";
-import { baseEmbed, EMOJI } from "@/bot/lib/embeds";
+import { baseEmbed, EMOJI, dashboardBase } from "@/bot/lib/embeds";
 import { getEnv } from "@/lib/env";
 import { inviteUrl as buildInviteUrl } from "@/lib/invite";
 
@@ -55,7 +55,6 @@ function helpSelectRow(t: Translator): ActionRowBuilder<StringSelectMenuBuilder>
 }
 
 function helpLinkRow(t: Translator): ActionRowBuilder<ButtonBuilder> {
-  const env = getEnv();
   const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
       .setLabel(t("info.inviteButton"))
@@ -63,13 +62,14 @@ function helpLinkRow(t: Translator): ActionRowBuilder<ButtonBuilder> {
       .setStyle(ButtonStyle.Link)
       .setURL(inviteUrl()),
   );
-  if (env.APP_URL) {
+  const dashboard = dashboardBase();
+  if (dashboard) {
     row.addComponents(
       new ButtonBuilder()
         .setLabel(t("info.dashboardButton"))
         .setEmoji("🖥️")
         .setStyle(ButtonStyle.Link)
-        .setURL(env.APP_URL),
+        .setURL(dashboard),
     );
   }
   return row;
@@ -165,7 +165,7 @@ export function buildMentionHelp(
   t: Translator,
   prefix: string,
 ): { embeds: EmbedBuilder[]; components: ComponentRow[] } {
-  const env = getEnv();
+  const dashboard = dashboardBase();
 
   const embed = baseEmbed()
     .setAuthor({ name: `👋 ${t("common.mentionHelp.title")}` })
@@ -199,25 +199,28 @@ export function buildMentionHelp(
     )
     .setFooter({ text: `Slux • ${commandCatalog.length} ${t("common.commands")}` });
 
-  const rows: ComponentRow[] = [];
-  const linkRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-    new ButtonBuilder()
-      .setLabel(t("common.mentionHelp.commandsButton"))
-      .setEmoji("📜")
-      .setStyle(ButtonStyle.Link)
-      .setURL(`${env.APP_URL}/commands`),
-    new ButtonBuilder()
-      .setLabel(t("common.mentionHelp.dashboardButton"))
-      .setEmoji("🖥️")
-      .setStyle(ButtonStyle.Link)
-      .setURL(env.APP_URL),
+  const linkRow = new ActionRowBuilder<ButtonBuilder>();
+  if (dashboard) {
+    linkRow.addComponents(
+      new ButtonBuilder()
+        .setLabel(t("common.mentionHelp.commandsButton"))
+        .setEmoji("📜")
+        .setStyle(ButtonStyle.Link)
+        .setURL(`${dashboard}/commands`),
+      new ButtonBuilder()
+        .setLabel(t("common.mentionHelp.dashboardButton"))
+        .setEmoji("🖥️")
+        .setStyle(ButtonStyle.Link)
+        .setURL(dashboard),
+    );
+  }
+  linkRow.addComponents(
     new ButtonBuilder()
       .setLabel(t("common.mentionHelp.inviteButton"))
       .setEmoji("🤖")
       .setStyle(ButtonStyle.Link)
       .setURL(inviteUrl()),
   );
-  rows.push(linkRow);
 
-  return { embeds: [embed], components: rows };
+  return { embeds: [embed], components: [linkRow] };
 }

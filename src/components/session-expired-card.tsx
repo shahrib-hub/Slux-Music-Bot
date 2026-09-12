@@ -3,6 +3,7 @@
 import { LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/components/i18n-provider";
+import { apiUrl } from "@/lib/api";
 
 /** Shown when the Discord access token inside the session has expired.
  *  `prompt: "none"` on our OAuth URL makes re-login a single click. */
@@ -18,7 +19,7 @@ export function SessionExpiredCard() {
         </p>
       </div>
       <Button asChild>
-        <a href="/api/auth/login">{t("dashboard.auth.login")}</a>
+        <a href={apiUrl("/api/auth/login")}>{t("dashboard.auth.login")}</a>
       </Button>
     </div>
   );

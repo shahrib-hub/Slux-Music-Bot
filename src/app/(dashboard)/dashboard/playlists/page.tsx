@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import { useI18n } from "@/components/i18n-provider";
 import { formatDuration, cn } from "@/lib/utils";
+import { apiFetch, socketOptions, socketUrl } from "@/lib/api";
 
 interface PlaylistTrackDoc {
   encoded: string;
@@ -56,7 +57,7 @@ export default function PlaylistsPage() {
   const [playTarget, setPlayTarget] = useState<PlaylistEntry | null>(null);
 
   const load = useCallback(() => {
-    fetch("/api/playlists")
+    apiFetch("/api/playlists")
       .then(async (r) => {
         if (!r.ok) throw new Error(String(r.status));
         return r.json();
@@ -69,7 +70,7 @@ export default function PlaylistsPage() {
 
   useEffect(() => {
     load();
-    fetch("/api/guilds")
+    apiFetch("/api/guilds")
       .then(async (r) => {
         if (!r.ok) throw new Error(String(r.status));
         return r.json();
@@ -84,7 +85,7 @@ export default function PlaylistsPage() {
   async function createPlaylist() {
     const name = newName.trim();
     if (!name) return;
-    const res = await fetch("/api/playlists", {
+    const res = await apiFetch("/api/playlists", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, description: newDescription.trim() }),
@@ -103,7 +104,7 @@ export default function PlaylistsPage() {
 
   async function deletePlaylist(playlist: PlaylistEntry) {
     if (!confirm(t("dashboard.playlists.deleteConfirm", { name: playlist.name }))) return;
-    const res = await fetch(`/api/playlists/${playlist.id}`, { method: "DELETE" });
+    const res = await apiFetch(`/api/playlists/${playlist.id}`, { method: "DELETE" });
     if (res.ok) {
       toast.success(t("dashboard.playlists.deleted"));
       load();
@@ -111,7 +112,7 @@ export default function PlaylistsPage() {
   }
 
   async function togglePublic(playlist: PlaylistEntry) {
-    await fetch(`/api/playlists/${playlist.id}`, {
+    await apiFetch(`/api/playlists/${playlist.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ public: !playlist.public }),
@@ -120,7 +121,7 @@ export default function PlaylistsPage() {
   }
 
   async function removeTrack(playlist: PlaylistEntry, index: number) {
-    await fetch(`/api/playlists/${playlist.id}`, {
+    await apiFetch(`/api/playlists/${playlist.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ removeTrackIndex: index }),
@@ -130,7 +131,7 @@ export default function PlaylistsPage() {
 
   async function playInGuild(playlist: PlaylistEntry, guildId: string) {
     const socket = await import("socket.io-client").then((m) =>
-      m.io("/dashboard", { path: "/socket.io", withCredentials: true }),
+      m.io(socketUrl() + "/dashboard", socketOptions),
     );
     socket.on("connect", () => {
       socket.emit("player:action", { guildId, action: "join" }, () => {

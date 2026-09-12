@@ -17,7 +17,12 @@ function startServer() {
   if (child || restarting) return;
   child = spawn(process.execPath, ["scripts/dev-child.mjs"], {
     stdio: "inherit",
-    env: { ...process.env, SLUX_DEV_PARENT: String(process.pid) },
+    env: {
+      ...process.env,
+      // Backend owns port 3001 in the split dev setup (Next dev uses 3000)
+      PORT: "3001",
+      SLUX_DEV_PARENT: String(process.pid),
+    },
   });
   child.on("exit", () => {
     child = null;
@@ -82,13 +87,24 @@ await ctx.rebuild();
 startServer();
 await ctx.watch();
 
+// Frontend: Next dev server on :3000, pointed at the backend on :3001.
+const web = spawn(process.execPath, ["node_modules/next/dist/bin/next", "dev", "--port", "3000"], {
+  stdio: "inherit",
+  env: {
+    ...process.env,
+    NEXT_PUBLIC_API_URL: "http://localhost:3001",
+  },
+});
+
 function shutdown() {
   if (restartTimer) clearTimeout(restartTimer);
   if (child) child.kill();
+  web.kill();
   void ctx.dispose().then(() => process.exit(0));
 }
 process.on("SIGINT", shutdown);
 process.on("SIGTERM", shutdown);
 process.on("exit", () => {
   if (child) child.kill();
+  web.kill();
 });

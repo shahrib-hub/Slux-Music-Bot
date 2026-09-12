@@ -12,6 +12,7 @@ import { Slider } from "@/components/ui/slider";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useI18n } from "@/components/i18n-provider";
 import { LOCALES } from "@/i18n";
+import { apiFetch } from "@/lib/api";
 
 interface GuildSettingsData {
   settings: {
@@ -42,7 +43,7 @@ export default function GuildSettingsPage() {
   const [draft, setDraft] = useState<GuildSettingsData["settings"] | null>(null);
 
   useEffect(() => {
-    fetch(`/api/guilds/${guildId}/settings`)
+    apiFetch(`/api/guilds/${guildId}/settings`)
       .then(async (r) => {
         if (!r.ok) throw new Error(String(r.status));
         return r.json();
@@ -59,7 +60,7 @@ export default function GuildSettingsPage() {
       if (!draft) return;
       setSaving(true);
       try {
-        const res = await fetch(`/api/guilds/${guildId}/settings`, {
+        const res = await apiFetch(`/api/guilds/${guildId}/settings`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(partial),

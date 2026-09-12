@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { EqualizerBars } from "@/components/brand";
 import { useI18n } from "@/components/i18n-provider";
+import { apiFetch, apiUrl } from "@/lib/api";
 
 export function LandingView({ inviteUrl }: { inviteUrl: string }) {
   const { t } = useI18n();
@@ -58,7 +59,7 @@ export function LandingView({ inviteUrl }: { inviteUrl: string }) {
               <span className="text-muted-foreground"> — {t("dashboard.auth.loginRequiredDescription")}</span>
             </p>
             <Button size="sm" asChild>
-              <a href="/api/auth/login">{t("dashboard.auth.login")}</a>
+              <a href={apiUrl("/api/auth/login")}>{t("dashboard.auth.login")}</a>
             </Button>
             <button onClick={() => setShowLogin(false)} className="cursor-pointer">
               <X className="h-4 w-4 text-muted-foreground" />
@@ -219,7 +220,7 @@ function LiveStats() {
   const [stats, setStats] = useState<{ servers: number; players: number; commands: number } | null>(null);
 
   useEffect(() => {
-    fetch("/api/stats")
+    apiFetch("/api/stats")
       .then((r) => r.json())
       .then(setStats)
       .catch(() => {});
