@@ -862,7 +862,8 @@
       "filtersReset": "फ़िल्टर रीसेट करें",
       "seekHint": "सीक करने के लिए खींचें",
       "requestedBy": "अनुरोधकर्ता",
-      "playingIn": "बज रहा है"
+      "playingIn": "बज रहा है",
+      "realtimeOff": "रीयल-टाइम बंद है"
     },
     "playlists": {
       "title": "आपकी प्लेलिस्ट",

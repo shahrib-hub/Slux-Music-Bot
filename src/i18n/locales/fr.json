@@ -862,7 +862,8 @@
       "filtersReset": "Réinitialiser les filtres",
       "seekHint": "Glisser pour naviguer",
       "requestedBy": "Demandée par",
-      "playingIn": "Lecture dans"
+      "playingIn": "Lecture dans",
+      "realtimeOff": "Temps réel déconnecté"
     },
     "playlists": {
       "title": "Vos playlists",

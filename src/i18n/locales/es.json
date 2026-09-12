@@ -862,7 +862,8 @@
       "filtersReset": "Restablecer filtros",
       "seekHint": "Arrastra para buscar",
       "requestedBy": "Pedida por",
-      "playingIn": "Sonando en"
+      "playingIn": "Sonando en",
+      "realtimeOff": "Tiempo real desconectado"
     },
     "playlists": {
       "title": "Tus listas",

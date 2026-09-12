@@ -862,7 +862,8 @@
       "filtersReset": "Filter zurücksetzen",
       "seekHint": "Ziehen zum Spulen",
       "requestedBy": "Angefragt von",
-      "playingIn": "Spielt in"
+      "playingIn": "Spielt in",
+      "realtimeOff": "Echtzeit getrennt"
     },
     "playlists": {
       "title": "Deine Playlists",

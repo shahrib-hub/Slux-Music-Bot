@@ -862,7 +862,8 @@
       "added": "Added to the queue",
       "live": "LIVE",
       "requestedBy": "Requested by",
-      "playingIn": "Playing in"
+      "playingIn": "Playing in",
+      "realtimeOff": "Realtime disconnected"
     },
     "playlists": {
       "title": "Your playlists",

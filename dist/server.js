@@ -1026,7 +1026,8 @@ var en_default = {
       added: "Added to the queue",
       live: "LIVE",
       requestedBy: "Requested by",
-      playingIn: "Playing in"
+      playingIn: "Playing in",
+      realtimeOff: "Realtime disconnected"
     },
     playlists: {
       title: "Your playlists",
@@ -1924,7 +1925,8 @@ var hi_default = {
       filtersReset: "\u092B\u093C\u093F\u0932\u094D\u091F\u0930 \u0930\u0940\u0938\u0947\u091F \u0915\u0930\u0947\u0902",
       seekHint: "\u0938\u0940\u0915 \u0915\u0930\u0928\u0947 \u0915\u0947 \u0932\u093F\u090F \u0916\u0940\u0902\u091A\u0947\u0902",
       requestedBy: "\u0905\u0928\u0941\u0930\u094B\u0927\u0915\u0930\u094D\u0924\u093E",
-      playingIn: "\u092C\u091C \u0930\u0939\u093E \u0939\u0948"
+      playingIn: "\u092C\u091C \u0930\u0939\u093E \u0939\u0948",
+      realtimeOff: "\u0930\u0940\u092F\u0932-\u091F\u093E\u0907\u092E \u092C\u0902\u0926 \u0939\u0948"
     },
     playlists: {
       title: "\u0906\u092A\u0915\u0940 \u092A\u094D\u0932\u0947\u0932\u093F\u0938\u094D\u091F",
@@ -2822,7 +2824,8 @@ var es_default = {
       filtersReset: "Restablecer filtros",
       seekHint: "Arrastra para buscar",
       requestedBy: "Pedida por",
-      playingIn: "Sonando en"
+      playingIn: "Sonando en",
+      realtimeOff: "Tiempo real desconectado"
     },
     playlists: {
       title: "Tus listas",
@@ -3720,7 +3723,8 @@ var fr_default = {
       filtersReset: "R\xE9initialiser les filtres",
       seekHint: "Glisser pour naviguer",
       requestedBy: "Demand\xE9e par",
-      playingIn: "Lecture dans"
+      playingIn: "Lecture dans",
+      realtimeOff: "Temps r\xE9el d\xE9connect\xE9"
     },
     playlists: {
       title: "Vos playlists",
@@ -4618,7 +4622,8 @@ var de_default = {
       filtersReset: "Filter zur\xFCcksetzen",
       seekHint: "Ziehen zum Spulen",
       requestedBy: "Angefragt von",
-      playingIn: "Spielt in"
+      playingIn: "Spielt in",
+      realtimeOff: "Echtzeit getrennt"
     },
     playlists: {
       title: "Deine Playlists",
@@ -5516,7 +5521,8 @@ var pt_default = {
       filtersReset: "Redefinir filtros",
       seekHint: "Arraste para buscar",
       requestedBy: "Pedida por",
-      playingIn: "Tocando em"
+      playingIn: "Tocando em",
+      realtimeOff: "Tempo real desconectado"
     },
     playlists: {
       title: "Suas playlists",

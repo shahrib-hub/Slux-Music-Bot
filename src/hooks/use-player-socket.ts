@@ -31,6 +31,7 @@ export type PlayerAction =
 export function usePlayerSocket(guildId: string) {
   const [snapshot, setSnapshot] = useState<PlayerSnapshot | null>(null);
   const [connected, setConnected] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const pendingRef = useRef(false);
 
@@ -40,6 +41,7 @@ export function usePlayerSocket(guildId: string) {
 
     socket.on("connect", () => {
       setConnected(true);
+      setError(null);
       socket.emit("guild:join", guildId);
     });
     socket.on("disconnect", () => setConnected(false));
@@ -47,7 +49,13 @@ export function usePlayerSocket(guildId: string) {
       setSnapshot(data);
       pendingRef.current = false;
     });
-    socket.on("connect_error", () => setConnected(false));
+    socket.on("connect_error", (err: Error) => {
+      setConnected(false);
+      setError(err.message);
+      // Visible diagnostics: the reason (unauthorized / websocket error /
+      // xhr poll error) pinpoints cookie vs proxy vs backend problems.
+      console.error("[slux] socket connect_error:", err.message);
+    });
     socket.io.on("reconnect_failed", () => setConnected(false));
 
     return () => {
@@ -72,7 +80,7 @@ export function usePlayerSocket(guildId: string) {
     });
   }, [guildId]);
 
-  return { snapshot, connected, send };
+  return { snapshot, connected, error, send };
 }
 
 /** Derived progress in ms, interpolating between snapshot updates. */

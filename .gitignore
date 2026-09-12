@@ -7,3 +7,7 @@ logs/
 .DS_Store
 tsconfig.tsbuildinfo
 next-env.d.ts
+# Dev-mode bundle — only dist/server.js + dist/package.json are deployed
+dist/server.dev.js
+# Panel install marker (created by the Wispbyte startup command)
+dist/.installed

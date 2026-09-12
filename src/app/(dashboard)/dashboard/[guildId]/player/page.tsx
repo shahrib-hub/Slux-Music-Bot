@@ -27,6 +27,7 @@ import {
   SlidersHorizontal,
   RotateCcw,
   ScrollText,
+  WifiOff,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -65,7 +66,7 @@ type TabValue = "queue" | "lyrics" | "history" | "filters";
 export default function PlayerPage() {
   const { guildId } = useParams<{ guildId: string }>();
   const { t } = useI18n();
-  const { snapshot, connected, send } = usePlayerSocket(guildId);
+  const { snapshot, connected, error: socketError, send } = usePlayerSocket(guildId);
   const progress = useProgress(snapshot);
 
   const [info, setInfo] = useState<GuildInfo | null>(null);
@@ -472,6 +473,15 @@ export default function PlayerPage() {
               )}
             </div>
           )}
+        </div>
+      )}
+
+      {/* Realtime status — shows WHY the socket is down, not just that it is */}
+      {info && !connected && (
+        <div className="mb-4 flex flex-wrap items-center gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-2.5 text-sm text-amber-500">
+          <WifiOff className="h-4 w-4 shrink-0" />
+          <span>{t("dashboard.player.realtimeOff")}</span>
+          {socketError && <span className="text-xs opacity-75">— {socketError}</span>}
         </div>
       )}
 
