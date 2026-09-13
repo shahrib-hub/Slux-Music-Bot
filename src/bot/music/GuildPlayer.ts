@@ -148,7 +148,34 @@ export class GuildPlayer {
     this.emit();
   }
 
+  // ── Dashboard heartbeat ──────────────────────────────────────────
+
+  /**
+   * While a track is playing, push a fresh snapshot to the dashboard every
+   * 3 seconds: song position/duration and full player state stay live even
+   * if an Lavalink update or state-change event is missed, and any client
+   * interpolation drift self-corrects. Idle/paused players stay silent
+   * (nothing changes while paused — the position is frozen).
+   */
+  private heartbeat: NodeJS.Timeout | null = null;
+
+  private startHeartbeat(): void {
+    if (this.heartbeat) return;
+    this.heartbeat = setInterval(() => {
+      if (this.current && !this.player.paused) this.emit();
+    }, 3_000);
+    this.heartbeat.unref?.();
+  }
+
+  private stopHeartbeat(): void {
+    if (this.heartbeat) {
+      clearInterval(this.heartbeat);
+      this.heartbeat = null;
+    }
+  }
+
   emit(): void {
+    this.startHeartbeat();
     this.events.onSnapshot?.(this.snapshot());
   }
 
@@ -658,6 +685,7 @@ export class GuildPlayer {
     if (this.destroyReason) return;
     this.destroyReason = reason;
     if (this.idleTimer) clearTimeout(this.idleTimer);
+    this.stopHeartbeat();
     this.queue = [];
     this.history = [];
     this.current = null;

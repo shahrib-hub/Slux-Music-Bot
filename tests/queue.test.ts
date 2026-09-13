@@ -22,7 +22,11 @@ function makeTrack(title: string, id = title): ResolvedTrack {
   };
 }
 
-function makeGuildPlayer(): GuildPlayer {
+function makeGuildPlayer(events?: {
+  onSnapshot?: () => void;
+  onTrackStart?: () => void;
+  onDestroy?: () => void;
+}): GuildPlayer {
   const shoukakuPlayer = new EventEmitter() as never as import("shoukaku").Player;
   Object.assign(shoukakuPlayer, {
     paused: false,
@@ -52,6 +56,7 @@ function makeGuildPlayer(): GuildPlayer {
     onSnapshot: () => {},
     onTrackStart: () => {},
     onDestroy: () => {},
+    ...events,
   });
 }
 
@@ -203,5 +208,54 @@ describe("GuildPlayer queue logic", () => {
     expect(snapshot.repeat).toBe("track");
     expect(snapshot.guildId).toBe("guild1");
     expect(snapshot.connected).toBe(false);
+  });
+});
+
+describe("dashboard heartbeat (3s snapshot push)", () => {
+  it("emits a snapshot every 3s while a track is playing", async () => {
+    vi.useFakeTimers();
+    try {
+      const onSnapshot = vi.fn();
+      const player = makeGuildPlayer({ onSnapshot });
+      player.current = makeTrack("a");
+
+      // The emit() that set up the heartbeat fires immediately once.
+      player.emit();
+      const before = onSnapshot.mock.calls.length;
+      expect(before).toBeGreaterThanOrEqual(1);
+
+      await vi.advanceTimersByTimeAsync(3_100);
+      expect(onSnapshot.mock.calls.length).toBe(before + 1);
+      await vi.advanceTimersByTimeAsync(6_000);
+      expect(onSnapshot.mock.calls.length).toBeGreaterThanOrEqual(before + 3);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("stays silent while paused and stops after destroy", async () => {
+    vi.useFakeTimers();
+    try {
+      const onSnapshot = vi.fn();
+      const player = makeGuildPlayer({ onSnapshot });
+      player.current = makeTrack("a");
+
+      await player.pause();
+      player.emit();
+      const paused = onSnapshot.mock.calls.length;
+      await vi.advanceTimersByTimeAsync(10_000);
+      expect(onSnapshot.mock.calls.length).toBe(paused); // no ticks while paused
+
+      await player.resume();
+      await vi.advanceTimersByTimeAsync(3_100);
+      expect(onSnapshot.mock.calls.length).toBeGreaterThan(paused); // resumes ticking
+
+      await player.destroy("stopped");
+      const atDestroy = onSnapshot.mock.calls.length;
+      await vi.advanceTimersByTimeAsync(10_000);
+      expect(onSnapshot.mock.calls.length).toBe(atDestroy); // heartbeat cleaned up
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

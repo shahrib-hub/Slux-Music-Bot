@@ -90,33 +90,13 @@ async function main() {
   let dashboard: ReturnType<SocketIOServer["of"]> | null = null;
 
   if (dashboardEnabled) {
-    // With the Vercel-rewrite proxy, socket connections arrive same-origin;
-    // the allowlist covers the proxy origin (APP_URL/DASHBOARD_URL = the
-    // Vercel URL) and local dev.
-    const socketOrigins = [
-      ...new Set(
-        [
-          env.DASHBOARD_URL,
-          env.APP_URL,
-          "http://localhost:3000",
-          "http://127.0.0.1:3000",
-        ].filter((o): o is string => Boolean(o)),
-      ),
-    ];
     io = new SocketIOServer(httpServer, {
       path: "/socket.io",
-      cors: {
-        origin: (origin, cb) => {
-          if (!origin || socketOrigins.includes(origin)) return cb(null, true);
-          // Visible misconfiguration hint instead of a silent rejection.
-          console.warn(
-            `[slux] Socket handshake rejected for origin ${origin}. Allowed: ${socketOrigins.join(", ")}. ` +
-              "Set APP_URL (or DASHBOARD_URL) to the dashboard's public URL.",
-          );
-          return cb(null, false);
-        },
-        credentials: true,
-      },
+      // Reflect any origin: real security is the signed session cookie checked
+      // in the /dashboard namespace middleware below — an origin allowlist
+      // only broke handshakes when APP_URL didn't exactly match the visited
+      // Vercel URL/alias ("websocket error" on the dashboard).
+      cors: { origin: true, credentials: true },
     });
     dashboard = io.of("/dashboard");
 

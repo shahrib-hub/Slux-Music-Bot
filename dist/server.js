@@ -5828,7 +5828,30 @@ var GuildPlayer = class {
     this.lastEmit = now;
     this.emit();
   }
+  // ── Dashboard heartbeat ──────────────────────────────────────────
+  /**
+   * While a track is playing, push a fresh snapshot to the dashboard every
+   * 3 seconds: song position/duration and full player state stay live even
+   * if an Lavalink update or state-change event is missed, and any client
+   * interpolation drift self-corrects. Idle/paused players stay silent
+   * (nothing changes while paused — the position is frozen).
+   */
+  heartbeat = null;
+  startHeartbeat() {
+    if (this.heartbeat) return;
+    this.heartbeat = setInterval(() => {
+      if (this.current && !this.player.paused) this.emit();
+    }, 3e3);
+    this.heartbeat.unref?.();
+  }
+  stopHeartbeat() {
+    if (this.heartbeat) {
+      clearInterval(this.heartbeat);
+      this.heartbeat = null;
+    }
+  }
   emit() {
+    this.startHeartbeat();
     this.events.onSnapshot?.(this.snapshot());
   }
   snapshot() {
@@ -6263,6 +6286,7 @@ var GuildPlayer = class {
     if (this.destroyReason) return;
     this.destroyReason = reason;
     if (this.idleTimer) clearTimeout(this.idleTimer);
+    this.stopHeartbeat();
     this.queue = [];
     this.history = [];
     this.current = null;
@@ -11805,28 +11829,13 @@ async function main() {
   let io = null;
   let dashboard = null;
   if (dashboardEnabled) {
-    const socketOrigins = [
-      ...new Set(
-        [
-          env.DASHBOARD_URL,
-          env.APP_URL,
-          "http://localhost:3000",
-          "http://127.0.0.1:3000"
-        ].filter((o) => Boolean(o))
-      )
-    ];
     io = new SocketIOServer(httpServer, {
       path: "/socket.io",
-      cors: {
-        origin: (origin, cb) => {
-          if (!origin || socketOrigins.includes(origin)) return cb(null, true);
-          console.warn(
-            `[slux] Socket handshake rejected for origin ${origin}. Allowed: ${socketOrigins.join(", ")}. Set APP_URL (or DASHBOARD_URL) to the dashboard's public URL.`
-          );
-          return cb(null, false);
-        },
-        credentials: true
-      }
+      // Reflect any origin: real security is the signed session cookie checked
+      // in the /dashboard namespace middleware below — an origin allowlist
+      // only broke handshakes when APP_URL didn't exactly match the visited
+      // Vercel URL/alias ("websocket error" on the dashboard).
+      cors: { origin: true, credentials: true }
     });
     dashboard = io.of("/dashboard");
     dashboard.use(async (socket, next) => {
